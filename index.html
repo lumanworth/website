@@ -1,6 +1,6 @@
 <!doctype html><html lang="en-AU"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="assets/icon-32.png" sizes="32x32"><link rel="apple-touch-icon" href="assets/icon-180.png">
 <title>Lumanworth</title>
-<meta name="description" content="Lumanworth is a software development company in Perth, Western Australia.">
+<meta name="description" content="Lumanworth is a private software company in Perth, Western Australia. We design, build and run websites, apps and enterprise systems for other companies.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;400;500&display=swap" rel="stylesheet">
 <style>
 :root{--ink:#1E2A1C;--moss:#5B6B3A;--bark:#4A3220;--cream:#F0E8D5;--line:#CAC6B4;--mute:#7B8071;--card:#F9F6EE}
@@ -44,21 +44,57 @@ section{padding:64px 0}h2{font-size:24px;margin-bottom:28px}
 .dark p{font-size:16px}.kv{grid-template-columns:120px 1fr}
 footer{flex-wrap:wrap;gap:12px 24px;padding:28px 20px}footer span:last-child{margin-left:0}
 }
+
+.hero{display:grid;grid-template-columns:1.25fr 1fr;gap:64px;align-items:center;padding:120px 32px 104px}
+.hero svg{width:100%;height:auto;display:block;max-width:360px;margin-left:auto}
+.g4{display:grid;grid-template-columns:1fr 1fr;gap:28px 48px}
+.g4 div{padding:26px 0 0;border-top:1px solid var(--line)}
+.g4 .num{display:block;margin-bottom:10px}.g4 h3{font-weight:500;font-size:18px;margin-bottom:8px}.g4 p{color:var(--mute);font-size:15px}
+.kv2{display:grid;grid-template-columns:1fr 1fr;gap:28px 48px}
+.kv2 div{padding-top:18px;border-top:1px solid #3C4A2B}.kv2 b{display:block;font-weight:500;color:var(--cream);margin-bottom:6px;font-size:17px}.kv2 p{font-size:15px}
+.facts{display:grid;grid-template-columns:150px 1fr;gap:12px 20px;font-size:15px}.facts span:nth-child(odd){color:var(--mute)}
+@media (max-width:720px){.hero{grid-template-columns:1fr;gap:40px;padding:64px 20px 56px}.hero svg{max-width:150px;margin-left:0;order:-1}.g4,.kv2{grid-template-columns:1fr;gap:20px}}
 </style></head><body>
-<header><div class="wrap bar"><a class="brand" href="/"><svg viewBox="0 0 42 36" width="34" height="29"><rect x="1" y="3" width="28" height="7" rx="3.5" fill="#5B6B3A"/><rect x="13" y="15" width="28" height="7" rx="3.5" fill="#1E2A1C"/><rect x="1" y="27" width="28" height="7" rx="3.5" fill="#1E2A1C"/></svg><span class="wm">Lumanworth</span></a><nav><a href="#contact">Contact</a></nav></div></header>
+<header><div class="wrap bar"><a class="brand" href="/"><svg viewBox="0 0 42 36" width="34" height="29"><rect x="1" y="3" width="28" height="7" rx="3.5" fill="#5B6B3A"/><rect x="13" y="15" width="28" height="7" rx="3.5" fill="#1E2A1C"/><rect x="1" y="27" width="28" height="7" rx="3.5" fill="#1E2A1C"/></svg><span class="wm">Lumanworth</span></a><nav><a class="hide" href="#build">What we build</a><a class="hide" href="#how">How we work</a><a class="hide" href="#company">Company</a><a href="#contact">Contact</a></nav></div></header>
 <div class="wrap hero">
-<h1>Software, built properly and handed over in full.</h1>
-<p class="lede">Lumanworth is a software development company in Perth, Western Australia. We build and run websites, apps and enterprise systems for our clients and for ourselves.</p>
+<div><h1>Software, built properly.</h1>
+<p class="lede">Lumanworth is a private software company in Perth, Western Australia. We design, build and run websites, apps and enterprise systems for other companies.</p>
+<a class="btn p" href="#contact">Get in touch</a></div>
+<svg viewBox="0 0 42 36" aria-hidden="true"><rect x="1" y="3" width="28" height="7" rx="3.5" fill="#5B6B3A"/><rect x="13" y="15" width="28" height="7" rx="3.5" fill="#1E2A1C"/><rect x="1" y="27" width="28" height="7" rx="3.5" fill="#4A3220"/></svg>
 </div>
 
-<section id="build"><div class="wrap">
+<section id="build"><div class="wrap"><h2>What we build</h2>
 <div class="g3">
-<div class="card"><div class="ln"></div><h3>Websites</h3><p>Fast, accessible and kept that way.</p></div>
-<div class="card"><div class="ln" style="background:#1E2A1C"></div><h3>Apps</h3><p>iOS, Android and web, with a runbook and a changelog.</p></div>
-<div class="card"><div class="ln" style="background:#4A3220"></div><h3>Enterprise systems</h3><p>Audited, reviewed and written down for the people who run them.</p></div>
+<div class="card"><div class="ln"></div><h3>Websites</h3><p>Company sites, product sites and the pages behind a campaign. Fast, accessible, measured, and kept that way after launch.</p></div>
+<div class="card"><div class="ln" style="background:#1E2A1C"></div><h3>Apps</h3><p>iOS, Android and web. Bookings, rostering, dispatch, memberships, payments and the admin behind them.</p></div>
+<div class="card"><div class="ln" style="background:#4A3220"></div><h3>Enterprise systems</h3><p>Systems for regulated and industrial work: audit trails, offline capture, role based access, migrations and release evidence.</p></div>
 </div></div></section>
 
-<section id="contact"><div class="wrap g2"><div><h2>Contact</h2></div><div><p style="font-size:18px;max-width:520px;line-height:1.6"><a href="mailto:support@lumanworth.com" style="color:var(--moss)">support@lumanworth.com</a></p><p style="color:var(--mute);margin-top:18px;font-size:15px">We work by introduction and reply within two working days.</p></div></div></section>
+<section id="how"><div class="wrap"><h2>How we work</h2>
+<div class="g4">
+<div><span class="num">01</span><h3>Brief</h3><p>We read everything you have and write back one page in plain words. The first stage is agreed before anyone quotes.</p></div>
+<div><span class="num">02</span><h3>Design</h3><p>Flows before screens. You see and accept the pictures before we build them.</p></div>
+<div><span class="num">03</span><h3>Build and review</h3><p>Small changes, independent review, tests on every one. Sign in, data and payments get a second reviewer.</p></div>
+<div><span class="num">04</span><h3>Release</h3><p>Preview first, then live on your approval, with a changelog you can read and a runbook your people can follow.</p></div>
+</div></div></section>
+
+<section class="dark"><div class="wrap"><h2>What you get</h2>
+<div class="kv2">
+<div><b>Your code, your accounts, your data</b><p>Every repository, hosting account and database is set up in your name from the first day. Nothing is held back and nothing is rented to you.</p></div>
+<div><b>Reviewed before it ships</b><p>Every change is reviewed and tested before it reaches a customer. Security sensitive work gets a second, independent review.</p></div>
+<div><b>Written down</b><p>A runbook, a changelog and decision records, so the next engineer, yours or ours, can pick the product up cold.</p></div>
+<div><b>Run, not just built</b><p>We can keep operating what we build: monitoring, updates, support and releases, on a retainer or until your own team takes it on.</p></div>
+</div></div></section>
+
+<section id="company"><div class="wrap g2"><div><h2>The company</h2><p style="color:var(--mute);font-size:16px;max-width:400px">Lumanworth is privately owned and run from Perth. We work with a small number of clients at a time, directly with the people who own the product.</p></div>
+<div class="facts">
+<span>Based</span><span>Perth, Western Australia</span>
+<span>Work</span><span>Websites, apps and enterprise systems, built for clients and operated on request</span>
+<span>Stack</span><span>TypeScript, Next.js, React Native, Postgres, hosted on Vercel and Supabase, Australian regions where the client needs them</span>
+<span>Clients</span><span>By introduction. We do not advertise and we do not publish client names.</span>
+</div></div></section>
+
+<section id="contact"><div class="wrap g2"><div><h2>Contact</h2></div><div><p style="font-size:18px;max-width:520px;line-height:1.6">Write to <a href="mailto:support@lumanworth.com" style="color:var(--moss)">support@lumanworth.com</a> with what you are building and who sent you.</p><p style="color:var(--mute);margin-top:18px;font-size:15px">We reply within two working days.</p></div></div></section>
 
 <footer class="wrap"><span>Lumanworth</span><span>Perth, Western Australia</span><a style="margin-left:auto" href="/privacy">Privacy</a></footer>
 </body></html>
