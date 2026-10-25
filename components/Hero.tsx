@@ -83,7 +83,6 @@ export default function Hero() {
       const r = section.getBoundingClientRect();
       const p = still ? 0 : clamp(-r.top / Math.max(1, section.offsetHeight - innerHeight));
       const e = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2, f = 1 - e, fz = clamp((e - 0.86) / 0.14);
-      if (r.bottom < 0) return;
       cx.clearRect(0, 0, W, H);
       if (!still && e < 0.3) {
         if (writers.length < 3 && Math.random() < 0.04) spawn();
@@ -122,6 +121,11 @@ export default function Hero() {
     };
 
     const loop = (now: number) => { draw(now); raf = requestAnimationFrame(loop); };
+    /* the loop runs only while the hero is on screen */
+    const seen = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting && !raf) { last = performance.now(); raf = requestAnimationFrame(loop); }
+      else if (!e.isIntersecting && raf) { cancelAnimationFrame(raf); raf = 0; }
+    });
     const redraw = () => { if (still) draw(performance.now()); };
 
     const move = (e: PointerEvent) => { const r = cv.getBoundingClientRect(); mx = e.clientX - r.left; my = e.clientY - r.top; };
@@ -138,10 +142,11 @@ export default function Hero() {
       addEventListener("pointermove", move, { passive: true });
       document.documentElement.addEventListener("pointerleave", leave);
       cv.addEventListener("pointerdown", down);
-      raf = requestAnimationFrame(loop);
+      seen.observe(section);
     }
     return () => {
       cancelAnimationFrame(raf);
+      seen.disconnect();
       theme.disconnect();
       removeEventListener("resize", resize);
       removeEventListener("pointermove", move);

@@ -43,7 +43,7 @@ export default function Yours() {
               </button>
             ))}
           </div>
-          <div className="sheet ts" id="own-sheet" role="tabpanel" aria-labelledby={`own-${cur}`} key={cur}>
+          <div className="sheet ts" id="own-sheet" role="tabpanel" tabIndex={0} aria-labelledby={`own-${cur}`} key={cur}>
             <div>
               <h3>{o.h}</h3>
               <p>{o.p}</p>

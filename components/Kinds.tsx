@@ -33,7 +33,7 @@ export default function Kinds() {
     if (!ln) return;
     if (held || matchMedia("(prefers-reduced-motion: reduce)").matches) { ln.style.width = "100%"; return; }
     let t0 = performance.now(), inView = false, raf = 0;
-    const io = new IntersectionObserver(([e]) => { inView = e.isIntersecting; if (inView) t0 = performance.now(); }, { threshold: 0.4 });
+    const io = new IntersectionObserver(([e]) => { inView = e.isIntersecting; }, { threshold: 0.4 });
     if (section.current) io.observe(section.current);
     const tick = (now: number) => {
       if (inView) {
@@ -50,7 +50,7 @@ export default function Kinds() {
   const hold = (i: number) => { setHeld(true); setAct(i); };
 
   return (
-    <section className="what band tb" id="what" aria-labelledby="what-h" ref={section}>
+    <section className="what band tb" id="what" aria-labelledby="what-h" ref={section} onFocus={() => setHeld(true)}>
       <div className="wrap grid">
         <div>
           <h2 className="s" id="what-h" data-r>What we do</h2>
@@ -68,14 +68,14 @@ export default function Kinds() {
             ))}
           </ul>
         </div>
-        <aside className="panel ts">
+        <div className="panel ts">
           {KINDS.map((k, i) => (
             <div key={k.h} id={`kind-${i}`} className={i === act ? "in on" : "in"} inert={i !== act}>
               <p className="k">{k.h}</p>
               <Body k={k} />
             </div>
           ))}
-        </aside>
+        </div>
       </div>
     </section>
   );

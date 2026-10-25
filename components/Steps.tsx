@@ -5,12 +5,14 @@ import Arrow from "./Arrow";
 import { STEPS } from "@/lib/words";
 
 /* How we work: a scrubber. Five dots at exact quarters, so the fill ends on a dot centre at every step.
-   Once in view it walks through the steps by itself until someone picks one. */
+   Once in view it walks through the steps by itself, and stops for good as soon as someone points at or focuses the section. */
 export default function Steps() {
   const [cur, setCur] = useState(0);
   const auto = useRef(true);
   const section = useRef<HTMLElement>(null);
   const nodes = useRef<(HTMLButtonElement | null)[]>([]);
+  const prev = useRef<HTMLButtonElement>(null);
+  const next = useRef<HTMLButtonElement>(null);
   const last = STEPS.length - 1;
 
   useEffect(() => {
@@ -35,6 +37,13 @@ export default function Steps() {
     setCur(i);
     if (focus) nodes.current[i]?.focus();
   };
+  /* at either end the pressed button disables, so focus moves to the other one */
+  const by = (d: number) => {
+    const n = cur + d;
+    pick(n);
+    if (n === 0) next.current?.focus();
+    if (n === last) prev.current?.focus();
+  };
   const onKey = (e: React.KeyboardEvent, i: number) => {
     const n = e.key === "ArrowRight" ? i + 1 : e.key === "ArrowLeft" ? i - 1 : -1;
     if (n >= 0 && n <= last) { e.preventDefault(); pick(n, true); }
@@ -42,7 +51,7 @@ export default function Steps() {
   const s = STEPS[cur];
 
   return (
-    <section className="how band ta" id="how" aria-labelledby="how-h" ref={section}>
+    <section className="how band ta" id="how" aria-labelledby="how-h" ref={section} onFocus={() => { auto.current = false; }} onPointerEnter={() => { auto.current = false; }}>
       <div className="wrap">
         <h2 className="s" id="how-h" data-r>How we work</h2>
         <p className="lede" data-r>Five steps, every job, any size. Each one ends with something in your hands and a decision that is yours.</p>
@@ -70,16 +79,18 @@ export default function Steps() {
             ))}
           </div>
         </div>
-        <div className="detail" id="step-detail" role="tabpanel" aria-labelledby={`step-${cur}`} key={cur}>
+        <div className="detail" id="step-detail" role="tabpanel" aria-labelledby={`step-${cur}`}>
           <div>
-            <h3>{s.h}</h3>
-            <span className="n mono">Step {cur + 1} of {STEPS.length}</span>
+            <div className="fade" key={cur}>
+              <h3>{s.h}</h3>
+              <span className="n mono">Step {cur + 1} of {STEPS.length}</span>
+            </div>
             <div className="pn">
-              <button type="button" aria-label="Previous step" disabled={cur === 0} onClick={() => pick(cur - 1)}><Arrow back /></button>
-              <button type="button" aria-label="Next step" disabled={cur === last} onClick={() => pick(cur + 1)}><Arrow /></button>
+              <button ref={prev} type="button" aria-label="Previous step" disabled={cur === 0} onClick={() => by(-1)}><Arrow back /></button>
+              <button ref={next} type="button" aria-label="Next step" disabled={cur === last} onClick={() => by(1)}><Arrow /></button>
             </div>
           </div>
-          <div>
+          <div className="fade" key={`w${cur}`}>
             <p className="p">{s.p}</p>
             <dl>
               <div><dt>You get</dt><dd>{s.get}</dd></div>
