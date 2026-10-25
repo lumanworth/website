@@ -1,41 +1,61 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import { OWN } from "@/lib/words";
 
-/* The lamp again, as a pointer spotlight on the cards. Fine pointers only; the cards read the same without it. */
+/* Yours to keep: a folder. The active tab takes the sheet's colour; arrow keys move between tabs. */
 export default function Yours() {
-  const cells = useRef<HTMLDivElement>(null);
-  const onMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (e.pointerType !== "mouse") return;
-    const el = cells.current;
-    if (!el) return;
-    for (const c of Array.from(el.children) as HTMLElement[]) {
-      const r = c.getBoundingClientRect();
-      c.style.setProperty("--mx", `${e.clientX - r.left}px`);
-      c.style.setProperty("--my", `${e.clientY - r.top}px`);
-    }
+  const [cur, setCur] = useState(0);
+  const tabs = useRef<(HTMLButtonElement | null)[]>([]);
+  const o = OWN[cur];
+
+  const onKey = (e: React.KeyboardEvent, i: number) => {
+    if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+    e.preventDefault();
+    const n = (i + (e.key === "ArrowRight" ? 1 : OWN.length - 1)) % OWN.length;
+    setCur(n);
+    tabs.current[n]?.focus();
   };
 
   return (
-    <section className="sec yours" id="yours" aria-labelledby="yours-h">
+    <section className="keep band tb" id="yours" aria-labelledby="yours-h">
       <div className="wrap">
-        <h2 id="yours-h" className="statement">What we build for you is yours once each phase is paid.</h2>
-        <p className="lede">Accounts are opened in your name on day one, and we work in them as a guest you can remove. Our own tools and any open source parts come with a permanent licence to use them.</p>
-        <div className="cells" ref={cells} onPointerMove={onMove}>
-          <div className="cell">
-            <h3>In your name</h3>
-            <p>Everything the product runs on is opened in your name before the first line is written.</p>
-            <ul aria-label="Opened in your name">
-              <li>Code</li><li>Hosting</li><li>Database</li><li>Payments</li><li>Domain</li>
-            </ul>
+        <div className="head">
+          <h2 className="big2" id="yours-h" data-r>Yours<br />to keep.</h2>
+          <p className="lede" data-r>Once a phase is paid, what we built is yours. Not a licence. Not a subscription. Yours, down to the last account.</p>
+        </div>
+        <div className="folder" data-r>
+          <div role="tablist" aria-label="What you keep">
+            {OWN.map((t, i) => (
+              <button
+                key={t.h}
+                ref={(el) => { tabs.current[i] = el; }}
+                type="button"
+                role="tab"
+                id={`own-${i}`}
+                aria-selected={i === cur}
+                aria-controls="own-sheet"
+                tabIndex={i === cur ? 0 : -1}
+                onClick={() => setCur(i)}
+                onKeyDown={(e) => onKey(e, i)}
+              >
+                {t.h}
+              </button>
+            ))}
           </div>
-          <div className="cell">
-            <h3>Written down</h3>
-            <p>A runbook, a changelog and a handover pack with every release, so anyone can pick it up cold.</p>
-          </div>
-          <div className="cell">
-            <h3>Agreed in writing</h3>
-            <p>Each phase has a fixed price and a target date, agreed in writing before work starts. Changes you ask for are quoted before we start.</p>
+          <div className="sheet ts" id="own-sheet" role="tabpanel" aria-labelledby={`own-${cur}`} key={cur}>
+            <div>
+              <h3>{o.h}</h3>
+              <p>{o.p}</p>
+            </div>
+            <dl className="rowsx">
+              {o.rows.map(([k, v], i) => (
+                <div key={k} style={{ animationDelay: `${i * 45}ms` }}>
+                  <dt>{k}</dt>
+                  <dd>{v}</dd>
+                </div>
+              ))}
+            </dl>
           </div>
         </div>
       </div>

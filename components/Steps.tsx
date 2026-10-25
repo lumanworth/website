@@ -1,55 +1,91 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import Arrow from "./Arrow";
+import { STEPS } from "@/lib/words";
 
-const steps = [
-  ["Brief", "We read what you have, talk to the people who will use it, and write back one page in plain words. Nothing is priced before you agree it."],
-  ["Design", "You click through the screens and accept them before anything is built."],
-  ["Build", "Small changes, each tested, on a preview you can use from the first week."],
-  ["Check", "Sign in, data and payments checked against a written list before release."],
-  ["Release", "Live on your approval, on your accounts, with a handover pack."],
-];
-
-/* The line under the steps fills once when the band comes into view. Without JavaScript the dots simply show. */
+/* How we work: a scrubber. Five dots at exact quarters, so the fill ends on a dot centre at every step.
+   Once in view it walks through the steps by itself until someone picks one. */
 export default function Steps() {
-  const list = useRef<HTMLOListElement>(null);
+  const [cur, setCur] = useState(0);
+  const auto = useRef(true);
+  const section = useRef<HTMLElement>(null);
+  const nodes = useRef<(HTMLButtonElement | null)[]>([]);
+  const last = STEPS.length - 1;
+
   useEffect(() => {
-    const el = list.current;
-    if (!el) return;
-    if (!("IntersectionObserver" in window)) {
-      el.classList.add("landed");
-      return;
-    }
-    const io = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((e) => e.isIntersecting)) {
-          el.classList.add("landed");
-          io.disconnect();
-        }
-      },
-      { threshold: 0.4 },
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches || !section.current) return;
+    let iv = 0;
+    const io = new IntersectionObserver(([e]) => {
+      if (!e.isIntersecting) return;
+      io.disconnect();
+      iv = window.setInterval(() => {
+        setCur((c) => {
+          if (!auto.current || c >= last) { clearInterval(iv); return c; }
+          return c + 1;
+        });
+      }, 2200);
+    }, { threshold: 0.5 });
+    io.observe(section.current);
+    return () => { io.disconnect(); clearInterval(iv); };
+  }, [last]);
+
+  const pick = (i: number, focus = false) => {
+    auto.current = false;
+    setCur(i);
+    if (focus) nodes.current[i]?.focus();
+  };
+  const onKey = (e: React.KeyboardEvent, i: number) => {
+    const n = e.key === "ArrowRight" ? i + 1 : e.key === "ArrowLeft" ? i - 1 : -1;
+    if (n >= 0 && n <= last) { e.preventDefault(); pick(n, true); }
+  };
+  const s = STEPS[cur];
 
   return (
-    <section className="sec how" id="how" aria-labelledby="how-h">
+    <section className="how band ta" id="how" aria-labelledby="how-h" ref={section}>
       <div className="wrap">
-        <h2 id="how-h">How we work</h2>
-        <p className="lede">The same five steps on every job, scaled to its size.</p>
-        <ol className="steps" ref={list}>
-          {steps.map(([title, body], i) => (
-            <li key={title}>
-              <span className="n">{String(i + 1).padStart(2, "0")}</span>
-              <h3>{title}</h3>
-              <p>{body}</p>
-            </li>
-          ))}
-        </ol>
-        <div className="after">
-          <h3>After handover</h3>
-          <p>You run it on your own accounts, and the handover pack lets your team, or any engineer you choose, carry it on. Defects in each release are fixed free for 30 days after it goes live. We do not host it or offer ongoing support. If you want our time after that, a prepaid block of our hours, valid for six months from the last go live, can be used for questions and small changes. New work is quoted as a new phase, and any change is quoted before we start it.</p>
+        <h2 className="s" id="how-h" data-r>How we work</h2>
+        <p className="lede" data-r>Five steps, every job, any size. Each one ends with something in your hands and a decision that is yours.</p>
+        <div className="scrub">
+          <div className="rail"><i style={{ width: `${(cur / last) * 100}%` }} /></div>
+          <div className="nodes" role="tablist" aria-label="Steps">
+            {STEPS.map((st, i) => (
+              <button
+                key={st.h}
+                ref={(el) => { nodes.current[i] = el; }}
+                type="button"
+                role="tab"
+                id={`step-${i}`}
+                aria-selected={i === cur}
+                aria-controls="step-detail"
+                tabIndex={i === cur ? 0 : -1}
+                className={i < cur ? "done" : undefined}
+                style={{ "--i": i } as React.CSSProperties}
+                onClick={() => pick(i)}
+                onKeyDown={(e) => onKey(e, i)}
+              >
+                <span />
+                <b>{st.h}</b>
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="detail" id="step-detail" role="tabpanel" aria-labelledby={`step-${cur}`} key={cur}>
+          <div>
+            <h3>{s.h}</h3>
+            <span className="n mono">Step {cur + 1} of {STEPS.length}</span>
+            <div className="pn">
+              <button type="button" aria-label="Previous step" disabled={cur === 0} onClick={() => pick(cur - 1)}><Arrow back /></button>
+              <button type="button" aria-label="Next step" disabled={cur === last} onClick={() => pick(cur + 1)}><Arrow /></button>
+            </div>
+          </div>
+          <div>
+            <p className="p">{s.p}</p>
+            <dl>
+              <div><dt>You get</dt><dd>{s.get}</dd></div>
+              <div><dt>You decide</dt><dd>{s.you}</dd></div>
+            </dl>
+          </div>
         </div>
       </div>
     </section>

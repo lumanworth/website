@@ -40,32 +40,21 @@ export default function Nav() {
 
   return (
     <header className={open ? "nav open" : "nav"}>
-      <div className="wrap">
-        <a className="lockup" href="/" aria-label="Lumanworth home">
-          <Symbol />
-          <span className="word">Lumanworth</span>
-        </a>
-        <nav aria-label="Main" id="mainnav">
-          <ul onClick={() => setOpen(false)}>
-            <li><a href="/#build">What we do</a></li>
-            <li><a href="/#how">How we work</a></li>
-            <li><a href="/#company">Company</a></li>
-            <li><a href="/#contact">Contact</a></li>
-          </ul>
-        </nav>
-        <button className="lights" type="button" aria-pressed={light} onClick={toggleLights}>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <path className="bulb" d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3Z" />
-          </svg>
-          <span>Lights</span>
-        </button>
-        <button className="menu" type="button" aria-expanded={open} aria-controls="mainnav" onClick={() => setOpen((o) => !o)}>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true">
-            <path d="M4 7h16M4 12h16M4 17h16" />
-          </svg>
-          <span>Menu</span>
-        </button>
-      </div>
+      <a className="lockup" href="/" aria-label="Lumanworth home">
+        <Symbol />
+        <span className="word">Lumanworth</span>
+      </a>
+      <nav aria-label="Main" id="mainnav">
+        <ul onClick={() => setOpen(false)}>
+          <li><a href="/#what">What we do</a></li>
+          <li><a href="/#how">How we work</a></li>
+          <li><a href="/#yours">Yours</a></li>
+          <li><a href="/#faq">Questions</a></li>
+          <li><a href="/#contact">Contact</a></li>
+        </ul>
+      </nav>
+      <button className="sw lights" type="button" aria-pressed={light} onClick={toggleLights}>Lights</button>
+      <button className="sw menu" type="button" aria-expanded={open} aria-controls="mainnav" onClick={() => setOpen((o) => !o)}>Menu</button>
     </header>
   );
 }
