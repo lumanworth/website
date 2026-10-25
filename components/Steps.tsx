@@ -49,7 +49,7 @@ export default function Steps() {
         </ol>
         <div className="after">
           <h3>After handover</h3>
-          <p>You run it on your own accounts, and the handover pack lets your team, or any engineer you choose, carry it on. Defects are fixed free for 30 days after each go live. We do not host or support it after that, but a prepaid block of our hours, valid for six months from the last go live, keeps us on call for questions and small changes. New work is quoted as a new phase, and any change is quoted before we start it.</p>
+          <p>You run it on your own accounts, and the handover pack lets your team, or any engineer you choose, carry it on. Defects in each release are fixed free for 30 days after it goes live. We do not host it or offer ongoing support. If you want our time after that, a prepaid block of our hours, valid for six months from the last go live, can be used for questions and small changes. New work is quoted as a new phase, and any change is quoted before we start it.</p>
         </div>
       </div>
     </section>
