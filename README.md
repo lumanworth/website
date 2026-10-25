@@ -4,7 +4,7 @@ The Lumanworth website. Next.js (App Router), React, TypeScript, hand written CS
 
 ## Pages
 
-- `/` Home: hero, What we do, How we work, what every client gets, The company, Start a project
+- `/` Home: the lines hero, What we do, How we work, Yours to keep, your records, questions, Perth, Start a project (words in `lib/words.ts`)
 - `/privacy` and `/terms`
 - `/api/contact` receives the form and sends it to the support mailbox
 
@@ -34,7 +34,9 @@ The form sends through an email delivery API. Without these the route answers 50
 
 ## Standards
 
-- Colours only from the brand ramps (dev/lumanworth/brand/v2/tokens.json), Manrope only, self hosted through next/font
+- Colours only from the brand ramps (dev/lumanworth/brand/v2/tokens.json); ink and cream alternate by section, cards are a step of their own band
+- Manrope for everything, JetBrains Mono for figures, both self hosted through next/font
+- Lines only mark things you click; no images, no pills, no eyebrows over headings
 - The symbol is never altered, only scaled
 - Reduced motion turns every animation off
 - Website tier: checks only, live on green. Hosted on Vercel (project website, team lumanworth), DNS on Cloudflare

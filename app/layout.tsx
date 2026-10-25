@@ -1,7 +1,8 @@
 import type { Metadata, Viewport } from "next";
-import { Manrope } from "next/font/google";
+import { JetBrains_Mono, Manrope } from "next/font/google";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
+import Reveal from "@/components/Reveal";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -9,6 +10,13 @@ const manrope = Manrope({
   weight: ["200", "400", "500"],
   display: "swap",
   variable: "--font-manrope",
+});
+
+const mono = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400"],
+  display: "swap",
+  variable: "--font-mono",
 });
 
 export const metadata: Metadata = {
@@ -35,12 +43,12 @@ export const viewport: Viewport = {
   ],
 };
 
-/* Theme before paint: a saved choice, else Perth daylight. Runs inline so there is no flash. */
-const themeScript = `(function(){try{var t=localStorage.getItem("lw-theme");if(t!=="light"&&t!=="dark"){var h=+new Intl.DateTimeFormat("en-AU",{timeZone:"Australia/Perth",hour:"numeric",hour12:false}).format(new Date());t=(h>=6&&h<18)?"light":"dark"}document.documentElement.dataset.theme=t}catch(e){}})();`;
+/* Theme before paint: a saved choice, else Perth daylight. Runs inline so there is no flash. The js class lets content rise into place; without script it is simply there. */
+const themeScript = `(function(){document.documentElement.classList.add("js");try{var t=localStorage.getItem("lw-theme");if(t!=="light"&&t!=="dark"){var h=+new Intl.DateTimeFormat("en-AU",{timeZone:"Australia/Perth",hour:"numeric",hour12:false}).format(new Date());t=(h>=6&&h<18)?"light":"dark"}document.documentElement.dataset.theme=t}catch(e){}})();`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en-AU" data-theme="dark" className={manrope.variable} suppressHydrationWarning>
+    <html lang="en-AU" data-theme="dark" className={`${manrope.variable} ${mono.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
@@ -51,6 +59,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Nav />
         {children}
         <Footer />
+        <Reveal />
       </body>
     </html>
   );

@@ -35,12 +35,41 @@ test.describe("home", () => {
   test("headings, bands and legal links are in place", async ({ page }) => {
     await page.goto("/");
     await expect(page.locator("h1")).toHaveText(/Built to last/);
-    for (const h of ["What we do", "How we work", "The company", "Start a project"]) {
+    for (const h of ["What we do", "How we work", "Questions people ask", "Start a project"]) {
       await expect(page.getByRole("heading", { name: h, exact: true })).toBeVisible();
     }
     await expect(page.locator("footer a[href='/privacy']")).toBeVisible();
     await expect(page.locator("footer a[href='/terms']")).toBeVisible();
     await expect(page.locator("text=0419")).toHaveCount(0);
+  });
+
+  test("the folder, the steps and the questions work by keyboard and click", async ({ page }) => {
+    await page.goto("/");
+    const first = page.getByRole("tab", { name: "In your name" });
+    await first.focus();
+    await page.keyboard.press("ArrowLeft");
+    const last = page.getByRole("tab", { name: "After handover" });
+    await expect(last).toBeFocused();
+    await expect(last).toHaveAttribute("aria-selected", "true");
+    await expect(page.locator("#own-sheet h3")).toHaveText("After handover");
+
+    await page.getByRole("tab", { name: "Build" }).click();
+    await expect(page.locator("#step-detail h3")).toHaveText("Build");
+    const next = page.getByRole("button", { name: "Next step" });
+    await next.focus();
+    await page.keyboard.press("Enter");
+    await expect(page.locator("#step-detail h3")).toHaveText("Check");
+    await expect(next).toBeFocused();
+    await page.keyboard.press("Enter");
+    await expect(page.locator("#step-detail h3")).toHaveText("Release");
+    await expect(next).toBeDisabled();
+    await expect(page.getByRole("button", { name: "Previous step" })).toBeFocused();
+
+    const q = page.getByRole("button", { name: "Who owns it?" });
+    await expect(q).toHaveAttribute("aria-expanded", "false");
+    await q.click();
+    await expect(q).toHaveAttribute("aria-expanded", "true");
+    await expect(page.locator("#a2")).toBeVisible();
   });
 
   test("security headers and no powered by", async ({ request }) => {
@@ -109,10 +138,12 @@ test.describe("phone", () => {
     const menu = page.getByRole("button", { name: "Menu" });
     await expect(page.locator("#mainnav")).toBeHidden();
     await expect(menu).toHaveAttribute("aria-expanded", "false");
+    const [pill, end] = await page.evaluate(() => [document.querySelector(".nav")!.getBoundingClientRect().right, document.querySelector(".nav .menu")!.getBoundingClientRect().right]);
+    expect(end, "menu button sits inside the nav").toBeLessThanOrEqual(pill);
     await menu.click();
     await expect(page.locator("#mainnav")).toBeVisible();
     await expect(menu).toHaveAttribute("aria-expanded", "true");
-    await page.locator("#mainnav a", { hasText: "Company" }).click();
+    await page.locator("#mainnav a", { hasText: "Contact" }).click();
     await expect(page.locator("#mainnav")).toBeHidden();
     await noOverflow(page);
   });
