@@ -14,7 +14,9 @@ export type Contact = {
 
 export type Parsed = { ok: true; data: Contact } | { ok: false; error: string };
 
-const str = (v: unknown, max: number) => (typeof v === "string" ? v.trim().slice(0, max) : "");
+/* One line fields: control characters become a space so nothing reaches an email header. */
+const str = (v: unknown, max: number) => (typeof v === "string" ? v.replace(/[\r\n\t\0]+/g, " ").trim().slice(0, max) : "");
+const text = (v: unknown, max: number) => (typeof v === "string" ? v.replace(/\0/g, "").trim().slice(0, max) : "");
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 export function parseContact(body: unknown): Parsed {
@@ -22,7 +24,7 @@ export function parseContact(body: unknown): Parsed {
   const b = body as Record<string, unknown>;
   const name = str(b.name, 120);
   const email = str(b.email, 200);
-  const what = str(b.what, 4000);
+  const what = text(b.what, 4000);
   const when = str(b.when, 40);
   if (!name) return { ok: false, error: "name" };
   if (!EMAIL.test(email)) return { ok: false, error: "email" };

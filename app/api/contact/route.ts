@@ -6,6 +6,14 @@ export const runtime = "nodejs";
 /* Sends the enquiry to the support mailbox through an email delivery API when the keys are set.
    Without them it answers 503 and the page tells the visitor to email instead. Nothing is stored here. */
 export async function POST(req: Request) {
+  /* Browsers always send Origin on a cross site post; when it is present it must be this site. */
+  const origin = req.headers.get("origin");
+  if (origin) {
+    let host = "";
+    try { host = new URL(origin).host; } catch {}
+    const self = req.headers.get("x-forwarded-host") ?? req.headers.get("host") ?? "";
+    if (host !== self) return NextResponse.json({ error: "forbidden" }, { status: 403 });
+  }
   let body: unknown;
   try {
     body = await req.json();
@@ -27,6 +35,9 @@ export async function POST(req: Request) {
     headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
     body: JSON.stringify({ from, to: [to], reply_to: parsed.data.email, subject, text }),
   });
-  if (!r.ok) return NextResponse.json({ error: "send_failed" }, { status: 502 });
+  if (!r.ok) {
+    console.error(`contact: email API answered ${r.status}`);
+    return NextResponse.json({ error: "send_failed" }, { status: 502 });
+  }
   return NextResponse.json({ ok: true });
 }

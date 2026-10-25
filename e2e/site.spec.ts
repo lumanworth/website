@@ -50,18 +50,22 @@ test.describe("home", () => {
     expect(h["x-frame-options"]).toBe("DENY");
     expect(h["referrer-policy"]).toBe("strict-origin-when-cross-origin");
     expect(h["x-powered-by"]).toBeUndefined();
+    expect(h["content-security-policy"]).toContain("frame-ancestors 'none'");
   });
 
   test("lights switch flips the theme and remembers it", async ({ page }) => {
     await page.goto("/");
     const before = await page.evaluate(() => document.documentElement.dataset.theme);
-    await page.getByRole("button", { name: "Lights" }).click();
+    const lights = page.getByRole("button", { name: "Lights" });
+    await expect(lights).toHaveAttribute("aria-pressed", String(before === "light"));
+    await lights.click();
     await expect.poll(() => page.evaluate(() => document.documentElement.dataset.theme)).not.toBe(before);
+    await expect(lights).toHaveAttribute("aria-pressed", String(before !== "light"));
     await page.reload();
     expect(await page.evaluate(() => document.documentElement.dataset.theme)).not.toBe(before);
   });
 
-  test("the form validates, then reports sent or not connected", async ({ page }) => {
+  test("the form validates, then reports not connected while no email keys are set", async ({ page }) => {
     await page.goto("/#contact");
     await page.getByRole("button", { name: "Send" }).click();
     const invalid = await page.evaluate(() => document.querySelector("form")!.checkValidity());
@@ -71,7 +75,7 @@ test.describe("home", () => {
     await page.getByRole("textbox", { name: "What do you need" }).fill("A short test enquiry from the e2e suite.");
     await page.getByRole("button", { name: "Send" }).click();
     const status = page.locator(".formfoot small");
-    await expect(status).toHaveText(/Thank you|not connected yet|did not send/);
+    await expect(status).toHaveText(/not connected yet/);
   });
 
   test("the contact route rejects junk and drops bots quietly", async ({ request }) => {
@@ -79,6 +83,8 @@ test.describe("home", () => {
     expect((await request.post("/api/contact", { data: { name: "x", email: "bad", what: "y" } })).status()).toBe(400);
     const bot = await request.post("/api/contact", { data: { name: "x", email: "a@b.co", what: "y", website: "spam" } });
     expect(bot.status()).toBe(200);
+    const cross = await request.post("/api/contact", { data: { name: "x", email: "a@b.co", what: "y" }, headers: { Origin: "https://evil.example" } });
+    expect(cross.status()).toBe(403);
   });
 
   test("speed: few requests, small page", async ({ page }) => {
@@ -102,8 +108,10 @@ test.describe("phone", () => {
     await page.goto("/");
     const menu = page.getByRole("button", { name: "Menu" });
     await expect(page.locator("#mainnav")).toBeHidden();
+    await expect(menu).toHaveAttribute("aria-expanded", "false");
     await menu.click();
     await expect(page.locator("#mainnav")).toBeVisible();
+    await expect(menu).toHaveAttribute("aria-expanded", "true");
     await page.locator("#mainnav a", { hasText: "Company" }).click();
     await expect(page.locator("#mainnav")).toBeHidden();
     await noOverflow(page);

@@ -32,6 +32,19 @@ describe("parseContact", () => {
   });
 });
 
+describe("line fields", () => {
+  it("flattens newlines so the subject cannot carry a header", () => {
+    const r = parseContact({ ...good, name: "Sam\r\nBcc: x@y.z", org: "A\tB" });
+    expect(r.ok && r.data.name).toBe("Sam Bcc: x@y.z");
+    expect(r.ok && r.data.org).toBe("A B");
+    expect(r.ok && contactEmail(r.data).subject.includes("\n")).toBe(false);
+  });
+  it("keeps newlines in the message body", () => {
+    const r = parseContact({ ...good, what: "line one\nline two" });
+    expect(r.ok && r.data.what).toBe("line one\nline two");
+  });
+});
+
 describe("contactEmail", () => {
   it("writes a plain subject and body", () => {
     const r = parseContact(good);

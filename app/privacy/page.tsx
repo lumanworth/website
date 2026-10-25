@@ -17,7 +17,7 @@ export default function Privacy() {
       <p>The light and dark setting is kept in your own browser only, so the page remembers your choice. It is not sent to us.</p>
 
       <h2>What you send us</h2>
-      <p>When you use the form or email us, we keep your name, your email address, your company if you gave it, and what you wrote. The form is delivered to our mailbox through an email delivery service, which handles the message only to deliver it. If you name the person who sent you, we use that only to thank them.</p>
+      <p>When you use the form or email us, we keep your name, your email address, your company if you gave it, and what you wrote. The form is delivered to our mailbox through an email delivery service, which handles the message only to deliver it. The hosting and the email delivery service both run outside Australia, so what you send through this site may be handled overseas by those two services, and only for those purposes. If you name the person who sent you, we use that only to thank them.</p>
       <p>If we go on to work together, we keep what the work needs: your contact details, the documents you share, and the records of the engagement.</p>
 
       <h2>How we use it</h2>
