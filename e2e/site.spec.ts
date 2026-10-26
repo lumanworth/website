@@ -143,11 +143,21 @@ test.describe("security and data", () => {
     await expect(page.getByRole("button", { name: "After handover" })).toHaveAttribute("aria-pressed", "true");
     await expect(page.locator(".side").first().locator("li", { hasText: "Credentials" })).toContainText("your own vault");
     await expect(ours.filter({ hasText: "Invoices" })).toHaveCount(1);
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa"]).analyze();
+    expect(axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id), "after handover state").toEqual([]);
     for (const f of ["/docs/data-handling.pdf", "/docs/security.pdf"]) {
       const res = await request.get(f);
       expect(res.status(), f).toBe(200);
       expect(res.headers()["content-type"]).toContain("application/pdf");
     }
+  });
+
+  test("the nav opens in the tone of the head", async ({ page }) => {
+    await page.goto("/security");
+    await expect(page.locator("header.nav")).toHaveClass(/\btb\b/);
+    await page.goto("/");
+    await expect(page.locator("header.nav")).toHaveClass(/\bta\b/);
   });
 
   test("home and footer link to the page", async ({ page }) => {

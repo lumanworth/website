@@ -6,6 +6,11 @@ export const metadata: Metadata = {
   title: "Security and data",
   description: "Your records stay in your accounts, in Australia. What sits with you, what sits with us, and the two statements behind it.",
   alternates: { canonical: "/security" },
+  openGraph: {
+    title: "Security and data, Lumanworth",
+    description: "Your records stay in your accounts, in Australia. We build around them, never with them.",
+    url: "/security",
+  },
 };
 
 const Down = () => (
