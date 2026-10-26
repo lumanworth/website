@@ -1,7 +1,7 @@
 import { expect, test, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
-const pages = ["/", "/privacy", "/terms"];
+const pages = ["/", "/security", "/privacy", "/terms"];
 
 async function noOverflow(page: Page) {
   const [sw, iw] = await page.evaluate(() => [document.documentElement.scrollWidth, innerWidth]);
@@ -17,6 +17,8 @@ test.describe("pages", () => {
       page.on("console", (m) => { if (m.type() === "error") errors.push(m.text()); });
       page.on("request", (r) => { if (!r.url().startsWith(baseURL!)) offsite.push(r.url()); });
 
+      /* Reduced motion: content is placed at once, so axe measures settled colours rather than a fade in progress. */
+      await page.emulateMedia({ reducedMotion: "reduce" });
       const res = await page.goto(path, { waitUntil: "networkidle" });
       expect(res?.status()).toBe(200);
       await expect(page.locator("h1")).toBeVisible();
@@ -128,6 +130,30 @@ test.describe("home", () => {
     await page.waitForTimeout(300);
     expect(count, "requests").toBeLessThanOrEqual(16);
     expect(bytes, "bytes transferred (uncompressed)").toBeLessThan(600_000);
+  });
+});
+
+test.describe("security and data", () => {
+  test("the switch moves rows between the sides and the statements download", async ({ page, request }) => {
+    await page.goto("/security");
+    const ours = page.locator(".side.ours li");
+    await expect(page.getByRole("button", { name: "During the build" })).toHaveAttribute("aria-pressed", "true");
+    await expect(page.locator(".side").first().locator("li", { hasText: "Our access" })).toContainText("multi factor");
+    await page.getByRole("button", { name: "After handover" }).click();
+    await expect(page.getByRole("button", { name: "After handover" })).toHaveAttribute("aria-pressed", "true");
+    await expect(page.locator(".side").first().locator("li", { hasText: "Credentials" })).toContainText("your own vault");
+    await expect(ours.filter({ hasText: "Invoices" })).toHaveCount(1);
+    for (const f of ["/docs/data-handling.pdf", "/docs/security.pdf"]) {
+      const res = await request.get(f);
+      expect(res.status(), f).toBe(200);
+      expect(res.headers()["content-type"]).toContain("application/pdf");
+    }
+  });
+
+  test("home and footer link to the page", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.locator("#data a[href='/security']")).toHaveCount(1);
+    await expect(page.locator("footer a[href='/security']")).toHaveCount(1);
   });
 });
 

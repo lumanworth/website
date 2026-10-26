@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Symbol from "./Symbol";
 
 type ThemedDocument = Document & { startViewTransition?: (update: () => void) => unknown };
@@ -11,8 +11,8 @@ export default function Nav() {
   const [tone, setTone] = useState<"ta" | "tb">("ta");
   const bar = useRef<HTMLElement>(null);
 
-  /* The glass takes the tone of the band beneath it, so cream glass never sits over an ink band. */
-  useEffect(() => {
+  /* The glass takes the tone of the band beneath it, so cream glass never sits over an ink band. Read before paint so a page that opens on tb does not fade in. */
+  useLayoutEffect(() => {
     let raf = 0;
     const read = () => {
       raf = 0;
