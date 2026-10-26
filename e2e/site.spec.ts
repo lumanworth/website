@@ -48,12 +48,14 @@ test.describe("home", () => {
   test("trimmed: records and Perth live on their pages, bands alternate, page links and the clients line", async ({ page }) => {
     await page.goto("/");
     await expect(page.locator("#data, #company")).toHaveCount(0);
-    const tones = await page.locator("main > section").evaluateAll((s) => s.map((x) => (x.classList.contains("ta") ? "ta" : "tb")));
+    const tones = await page.locator("main > section").evaluateAll((s) => s.map((x) => (x.classList.contains("ta") ? "ta" : x.classList.contains("tb") ? "tb" : "none")));
     expect(tones).toEqual(["ta", "tb", "ta", "tb", "ta", "tb"]);
     await expect(page.locator("footer")).toHaveClass(/\bta\b/);
     await expect(page.locator("#what a.pl[href='/what']")).toHaveText("All of what we do");
     await expect(page.locator("#how a.pl[href='/how']")).toHaveText("The full process");
     await expect(page.locator("#contact .cl")).toHaveText("Most of our work comes by introduction. We do not publish client names.");
+    await page.evaluate(() => { const f = document.getElementById("faq")!; scrollTo(0, f.getBoundingClientRect().top + scrollY - 10); });
+    await expect(page.locator("header.nav")).toHaveClass(/\bta\b/);
   });
 
   test("the folder, the steps and the questions work by keyboard and click", async ({ page }) => {
@@ -247,6 +249,7 @@ test.describe("how we work", () => {
 
   test("the nav opens in the tone of the head", async ({ page }) => {
     await page.goto("/how");
+    await expect(page.locator(".hclose .lede")).toHaveText("A small number of jobs at a time, so the person you meet is the person who builds yours.");
     await expect(page.locator("header.nav")).toHaveClass(/\btb\b/);
   });
 });
