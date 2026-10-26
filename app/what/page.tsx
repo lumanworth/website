@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import "./what.css";
 import Arrow from "@/components/Arrow";
 import Ask from "@/components/Ask";
 import Mapped from "@/components/Mapped";

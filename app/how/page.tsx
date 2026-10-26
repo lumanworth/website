@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import "./how.css";
 import Arrow from "@/components/Arrow";
 import Journey from "@/components/Journey";
 import Symbol from "@/components/Symbol";

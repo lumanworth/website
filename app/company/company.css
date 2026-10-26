@@ -1,0 +1,31 @@
+/* Company page styles, loaded on /company only. Tokens and shared classes live in app/globals.css. */
+/* Company: the facts, two jobs at a time, and what we take on or turn down. Scoped to the page (.cp) because Home uses .co for its Perth band. */
+.cp p, .cp li { font-size: 20px; line-height: 1.55; }
+.cp .phead p { margin-top: 24px; max-width: 560px; }
+.cp .facts { display: grid; gap: 14px; padding-top: 10px; }
+.cp .facts div { display: grid; grid-template-columns: 110px 1fr; gap: 16px; align-items: baseline; }
+.cp .facts dt { color: var(--soft); font-size: 17px; }
+.cp .facts dd { font-size: 20px; }
+.cp .facts a { color: var(--lit-text); text-decoration: none; }
+.cp .facts a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.cp .small .wrap { display: grid; grid-template-columns: 5fr 7fr; gap: 72px; align-items: start; }
+.cp .small p { max-width: 600px; }
+.cp .small p + p { margin-top: 18px; }
+.cp .scope .top { display: grid; grid-template-columns: 5fr 7fr; gap: 72px; align-items: end; }
+.cp .scope h2 { margin-bottom: 0; }
+.cp .track button { font-size: 20px; padding-bottom: 16px; letter-spacing: 0; }
+.cp .list { list-style: none; margin-top: 56px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px 72px; min-height: 300px; align-content: start; }
+.cp .list[hidden] { display: none; }
+.cp .list li { animation: in .45s var(--ease) both; }
+.cp .list b { display: block; font-weight: 500; }
+.cp .list span { display: block; color: var(--soft); font-size: 18px; }
+.cp .close { margin-top: 88px; display: flex; justify-content: space-between; align-items: center; gap: 32px; flex-wrap: wrap; }
+@media (max-width: 960px) {
+  .cp .phead .wrap, .cp .small .wrap, .cp .scope .top { grid-template-columns: 1fr; gap: 32px; }
+}
+@media (max-width: 860px) {
+  .cp p, .cp li, .cp .facts dd { font-size: 18px; }
+  .cp .list { grid-template-columns: 1fr; gap: 20px; margin-top: 40px; }
+  .cp .facts div { grid-template-columns: 90px 1fr; }
+  .cp .track button { font-size: 18px; }
+}

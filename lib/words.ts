@@ -261,3 +261,36 @@ export const ASKS: Ask[] = [
    Slow 4G as Lighthouse throttles it, 150 ms round trip at 1.6 Mbps; 3G at 400 ms and 400 kbps. */
 export const NETWORKS = { "4g": { name: "Slow 4G", words: 0.9, done: 1.5 }, "3g": { name: "3G", words: 2.4, done: 4.8 } } as const;
 export const PAGE_KB = 160;
+
+/* Company: what we take on and what we turn down, from the price sheet, in plain words. */
+export type ScopeItem = [string, string];
+export const SCOPE: Record<"on" | "off", { h: string; label: string; items: ScopeItem[] }> = {
+  on: {
+    h: "What we take on.",
+    label: "We take on",
+    items: [
+      ["Web apps and admin consoles", "The system the office runs on"],
+      ["Phone apps", "Published through the stores, under your name"],
+      ["Customer and partner portals", "Bookings, documents and accounts in one place"],
+      ["Booking, dispatch and payments", "From the first booking to the paid invoice"],
+      ["Links to systems you already use", "Accounting, sign in and the rest"],
+      ["AI on your own records", "Answers with the source, or no answer"],
+      ["Offline work and sync", "For crews out of signal"],
+      ["Company websites", "Fast, accessible, and yours"],
+    ],
+  },
+  off: {
+    h: "What we turn down.",
+    label: "We turn down",
+    items: [
+      ["Hardware and firmware", "Devices are their own trade"],
+      ["Games", "A craft of its own"],
+      ["Crypto and blockchain", "Not work we stand behind"],
+      ["Banking, lending and insurance cores", "Licensed work, for licensed builders"],
+      ["Medical device software", "Regulated as a device, so not us"],
+      ["Large ERP rollouts", "A different kind of firm"],
+      ["Fixed prices on code we have not read", "A paid review comes first"],
+      ["Running your product after handover", "It is yours to run, on your accounts"],
+    ],
+  },
+};
