@@ -40,6 +40,19 @@ test.describe("home", () => {
     const pz = page.locator(desk ? ".panel .pz" : ".pz.ph");
     await expect(page.locator(desk ? ".pz.ph" : ".panel .pz")).toBeHidden();
     await page.locator("#what").scrollIntoViewIfNeeded();
+    if (desk) {
+      const clear = await page.evaluate(() => {
+        const b = document.querySelector(".panel .pz")!.getBoundingClientRect();
+        const hit = (r: DOMRect) => r.left < b.right && r.right > b.left && r.top < b.bottom && r.bottom > b.top;
+        return [...document.querySelectorAll(".panel .in")].every((d) => {
+          d.classList.add("on");
+          const lines = [d.querySelector(".k")!, d.querySelector(".p")!].flatMap((e) => { const r = document.createRange(); r.selectNodeContents(e); return [...r.getClientRects()]; });
+          d.classList.remove("on");
+          return lines.length > 0 && !lines.some(hit);
+        });
+      });
+      expect(clear, "the pause button covers no panel words").toBe(true);
+    }
     const line = page.locator(".kinds li.act .ln");
     const width = () => line.evaluate((l) => parseFloat((l as HTMLElement).style.width) || 0);
     await expect.poll(width).toBeGreaterThan(5);
@@ -52,6 +65,7 @@ test.describe("home", () => {
     await expect(line).toHaveAttribute("style", /width: 100%/);
     await pz.click();
     await expect(pz).toHaveAttribute("aria-label", "Pause");
+    await page.waitForTimeout(1000);
     await expect(page.locator(".kinds li.act .h"), "play starts the same line again").toHaveText(act!);
     await page.mouse.move(0, 0);
     await page.evaluate(() => document.getElementById("what")!.scrollIntoView());
@@ -64,6 +78,11 @@ test.describe("home", () => {
     await page.goto("/");
     await expect(page.locator(".pz")).toHaveCount(2);
     for (const b of await page.locator(".pz").all()) await expect(b).toBeHidden();
+    await page.locator("#what").scrollIntoViewIfNeeded();
+    const act = await page.locator(".kinds li.act .h").textContent();
+    await page.waitForTimeout(7500);
+    await expect(page.locator(".kinds li.act .h")).toHaveText(act!);
+    await expect(page.locator(".kinds li.act .ln")).toHaveAttribute("style", /width: 100%/);
   });
 
   test("headings, bands and legal links are in place", async ({ page }) => {

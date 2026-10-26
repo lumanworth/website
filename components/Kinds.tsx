@@ -77,7 +77,7 @@ export default function Kinds() {
           {pz("ph")}
         </div>
         <div className="panel ts">
-          {pz("pn")}
+          {pz("pd")}
           {KINDS.map((k, i) => (
             <div key={k.h} id={`kind-${i}`} className={i === act ? "in on" : "in"} inert={i !== act}>
               <p className="k">{k.h}</p>
