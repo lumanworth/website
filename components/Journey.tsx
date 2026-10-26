@@ -27,7 +27,8 @@ export default function Journey() {
   const fills = useRef<(HTMLElement | null)[]>([]);
   const tabs = useRef<(HTMLButtonElement | null)[]>([]);
   const t0 = useRef(0);
-  const inView = useRef(false);
+  const [live, setLive] = useState(false);
+  const [told, setTold] = useState(false);
 
   useEffect(() => {
     try {
@@ -42,42 +43,41 @@ export default function Journey() {
     setK(i);
   }, []);
 
+  /* The timer only runs while the band is in view and the browser tab is showing. */
   useEffect(() => {
     const el = band.current;
     if (!el) return;
-    const io = new IntersectionObserver(([e]) => {
-      inView.current = e.isIntersecting;
-      if (e.isIntersecting) t0.current = performance.now();
-    }, { threshold: 0.35 });
+    let seen = false;
+    const sync = () => setLive(seen && !document.hidden);
+    const io = new IntersectionObserver(([e]) => { seen = e.isIntersecting; sync(); }, { threshold: 0.35 });
     io.observe(el);
-    return () => io.disconnect();
+    document.addEventListener("visibilitychange", sync);
+    return () => { io.disconnect(); document.removeEventListener("visibilitychange", sync); };
   }, []);
 
-  /* Fill the current line from a frame loop, written straight to the element so the page does not re-render every frame. */
+  /* Fill the current line from a frame loop, written straight to the element so the page does not re-render every frame.
+     The loop runs only while playing and live; coming back into view starts the current line again. */
   useEffect(() => {
-    fills.current.forEach((f, j) => { if (f) f.style.width = j < k ? "100%" : "0"; });
+    fills.current.forEach((f, j) => { if (f) f.style.width = j < k || (j === k && !playing) ? "100%" : "0"; });
+    if (!playing || !live) return;
+    t0.current = performance.now();
     let raf = 0;
     const tick = (now: number) => {
+      const q = Math.min(1, (now - t0.current) / DUR);
       const f = fills.current[k];
-      if (f) {
-        if (!playing) f.style.width = "100%";
-        else if (inView.current) {
-          const q = Math.min(1, (now - t0.current) / DUR);
-          f.style.width = `${q * 100}%`;
-          if (q >= 1) {
-            if (k < STAGES.length - 1) go(k + 1);
-            else setPlaying(false);
-            return;
-          }
-        }
+      if (f) f.style.width = `${q * 100}%`;
+      if (q >= 1) {
+        if (k < STAGES.length - 1) go(k + 1);
+        else setPlaying(false);
+        return;
       }
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [k, playing, go]);
+  }, [k, playing, live, go]);
 
-  const hold = () => setPlaying(false);
+  const hold = () => { setPlaying(false); setTold(true); };
   const choose = (t: Track) => {
     setTrack(t);
     try { localStorage.setItem("lw-track", t); } catch {}
@@ -92,8 +92,7 @@ export default function Journey() {
   };
   const toggle = () => {
     if (!playing && k === STAGES.length - 1) go(0);
-    t0.current = performance.now();
-    setPlaying((p) => !p);
+    setPlaying(!playing);
   };
 
   const s = STAGES[k];
@@ -101,7 +100,8 @@ export default function Journey() {
   let n0 = 0;
 
   return (
-    <div className={track === "s" ? "journey sys" : "journey"} ref={band}>
+    <div className={track === "s" ? "journey sys" : "journey"} ref={band}
+      onFocus={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setPlaying(false); }}>
       <div className="jtop">
         <div>
           <h2 className="s" id="j-h" data-r>From hello to handover.</h2>
@@ -125,7 +125,7 @@ export default function Journey() {
                   return (
                     <button key={i} type="button" role="tab" id={`stage-${i}`} aria-controls="stage-panel" aria-selected={i === k} tabIndex={i === k ? 0 : -1}
                       aria-label={`Stage ${i + 1}, ${pickTrack(STAGES[i].h, track)}`} ref={(el) => { tabs.current[i] = el; }}
-                      className={["seg", REPEATS.has(i) ? "rep" : "", i < k ? "done" : ""].join(" ").trim()}
+                      className={REPEATS.has(i) ? "seg rep" : "seg"}
                       onClick={() => { hold(); go(i); }} onKeyDown={(e) => onKey(e, i)}>
                       <span className="no mono">{i + 1}</span>
                       <span className="bar"><i ref={(el) => { fills.current[i] = el; }} /></span>
@@ -134,14 +134,16 @@ export default function Journey() {
                   );
                 })}
               </div>
-              <span className="nm">{name}<small>Each build phase</small></span>
+              <span className="nm">{name}<small aria-hidden={track === "s" && (g === 2 || g === 3) ? undefined : true}>Each build phase</small></span>
             </div>
           );
         })}
       </div>
 
-      {/* Announce a stage only when someone chose it, not on every timed step. The controls sit outside the keyed parts and use aria-disabled, so focus stays on them at either end. */}
-      <div className="stagep ts" id="stage-panel" role="tabpanel" aria-labelledby={`stage-${k}`} aria-live={playing ? "off" : "polite"}>
+      {/* Announce a stage only once someone has chosen one, not on every timed step: the status line stays in the page and fills only then.
+          The controls sit outside the keyed parts and use aria-disabled, so focus stays on them at either end. */}
+      <p className="sr" aria-live="polite">{told && !playing ? `Stage ${k + 1} of ${STAGES.length}, ${pickTrack(s.h, track)}` : ""}</p>
+      <div className="stagep ts" id="stage-panel" role="tabpanel" aria-labelledby={`stage-${k}`}>
         <div>
           <div className="fade" key={`a${track}${k}`}>
             <span className="of mono">Stage {k + 1} of {STAGES.length}</span>

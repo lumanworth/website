@@ -236,7 +236,6 @@ textarea.field { min-height: 120px; resize: vertical; }
 /* Build phases repeat: two ghost lines under stages 6 and 7, set like the symbol, the middle one indented. */
 .seg .gh { position: absolute; left: 0; right: 0; top: 36px; height: 7px; border-radius: 4px; border: 1px solid var(--line); opacity: 0; transform: translateY(-6px); transition: opacity .4s var(--ease), transform .4s var(--ease); }
 .seg .gh + .gh { top: 50px; }
-.seg .gh:first-of-type { left: 12px; right: -12px; }
 .sys .seg.rep .gh { opacity: 1; transform: none; }
 .sys .seg.rep { padding-bottom: 42px; }
 .grp .nm { font-size: 17px; color: var(--muted); transition: color .3s; white-space: nowrap; }
@@ -296,6 +295,9 @@ textarea.field { min-height: 120px; resize: vertical; }
 .prose p { margin-bottom: 14px; color: var(--soft); }
 .prose a { color: var(--fg); }
 .prose ul { margin: 0 0 14px 20px; color: var(--soft); }
+
+/* Read by screen readers, not shown */
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
 /* Reveal: only when script is running */
 .js [data-r] { opacity: 0; transform: translateY(24px); transition: opacity .9s var(--ease), transform .9s var(--ease); }

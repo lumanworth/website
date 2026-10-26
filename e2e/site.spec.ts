@@ -177,6 +177,8 @@ test.describe("how we work", () => {
     await expect(page.getByRole("button", { name: "Play" })).toBeVisible();
     await expect(panel).toContainText("Stage 1 of 10");
     await tabs.nth(0).focus();
+    await page.keyboard.press("ArrowLeft");
+    await expect(tabs.nth(0)).toHaveAttribute("aria-selected", "true");
     await page.keyboard.press("ArrowRight");
     await expect(tabs.nth(1)).toBeFocused();
     await expect(tabs.nth(1)).toHaveAttribute("aria-selected", "true");
@@ -197,6 +199,29 @@ test.describe("how we work", () => {
     await page.keyboard.press("Enter");
     await expect(panel).toContainText("Stage 10 of 10");
     await expect(next).toBeFocused();
+    await page.getByRole("button", { name: "Play" }).click();
+    await expect(panel).toContainText("Stage 1 of 10");
+    await expect(page.getByRole("button", { name: "Pause" })).toBeVisible();
+  });
+
+  test("the timer holds out of view, under reduced motion, and when focus comes in", async ({ browser }) => {
+    const still = await browser.newPage({ reducedMotion: "reduce" });
+    await still.goto("/how");
+    await still.locator("#stage-panel").scrollIntoViewIfNeeded();
+    const away = await browser.newPage();
+    await away.goto("/how");
+    await away.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    await away.waitForTimeout(7500);
+    await expect(still.locator("#stage-panel"), "reduced motion").toContainText("Stage 1 of 10");
+    await expect(away.locator("#stage-panel"), "out of view").toContainText("Stage 1 of 10");
+    await away.locator("#stage-panel").scrollIntoViewIfNeeded();
+    await away.getByRole("tab").first().focus();
+    await expect(away.getByRole("button", { name: "Play" })).toBeVisible();
+    await expect(away.locator(".sr[aria-live]")).toHaveText("");
+    await away.keyboard.press("ArrowRight");
+    await expect(away.locator(".sr[aria-live]")).toHaveText("Stage 2 of 10, First session");
+    await still.close();
+    await away.close();
   });
 
   test("the timer moves on and pause holds it", async ({ page }) => {
