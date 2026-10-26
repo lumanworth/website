@@ -2,7 +2,7 @@
    both self hosted through next/font. No gradients, shadows or glows.
    Ink and cream alternate section by section: ta follows the lights, tb is its opposite. A card (ts) on ink is a quiet step of the band; on cream it has no fill, only its line (26 Oct).
    Type scale (26 Oct): no huge headline over small grey writing. Headings at most about twice body size, ledes and body at full strength; the hero and the footer wordmark are the only large type.
-   Moss only for lit things and headings on cream; small text that would be lit uses --lit-text (cream on ink, moss on cream) because Moss lit on Ink is 4.44:1; Bark is the button on cream, and (26 Oct) --warm marks movement and position: timer fills, progress, the chosen switch; --warm-text the numbers beside them (Bark on cream; Moss lit and cream on ink). Moss keeps headings, words and links. Lines only mark things you click; everything else is spacing and type. */
+   Moss only for lit things and headings on cream; small text that would be lit uses --lit-text (cream on ink, moss on cream) because Moss lit on Ink is 4.44:1; Bark is the button on cream, and (26 Oct) --warm marks movement and position: timer fills, progress, the chosen switch; --warm-text the numbers beside them (Bark on cream, cream on ink). Moss keeps headings, words and links. Lines only mark things you click; everything else is spacing and type. */
 :root {
   --ink: #1e2a1c; --ink-1: #d0ccb9; --ink-2: #9c9c8b; --ink-3: #5d6354; --ink-5: #151d14;
   --moss: #5b6b3a; --moss-lit: #889068;

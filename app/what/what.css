@@ -22,7 +22,7 @@
 .wd .ev { list-style: none; }
 .wd .ev li { display: grid; grid-template-columns: 1fr auto; gap: 4px 16px; padding: 9px 0; transition: opacity .45s var(--ease), transform .45s var(--ease); }
 /* Every row keeps its place from the first paint; a row waiting to play is held invisible, so the card never changes size. */
-.wd .ev li.w { opacity: 0; transform: translateY(10px); visibility: hidden; }
+.wd .ev li.w { opacity: 0; transform: translateY(6px); visibility: hidden; }
 .wd .ev li b { font-weight: 500; font-size: 16px; }
 .wd .ev .t { color: var(--muted); text-align: right; }
 .wd .ev .e { grid-column: 1 / -1; color: var(--muted); font-size: 12px; }
