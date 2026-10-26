@@ -4,7 +4,7 @@ import Scope from "@/components/Scope";
 
 export const metadata: Metadata = {
   title: "Company",
-  description: "A small software company in Perth. Two jobs at a time, a senior engineer on each, and what we take on and turn down.",
+  description: "A small software company in Perth. Two jobs at a time, what we take on, and what we turn down.",
   alternates: { canonical: "/company" },
   openGraph: {
     title: "Company, Lumanworth",

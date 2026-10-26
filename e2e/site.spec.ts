@@ -299,14 +299,27 @@ test.describe("company", () => {
     await expect(page.locator("header.nav")).toHaveClass(/\btb\b/);
     await expect(page.locator(".facts")).toContainText("Lumanworth Pty Ltd");
     await expect(page.locator(".facts")).toContainText("On registration");
-    const list = page.locator(".scope .list li");
+    const list = page.locator(".scope .list:visible li");
+    const on = page.getByRole("button", { name: "We take on" });
+    const off = page.getByRole("button", { name: "We turn down" });
+    const status = page.locator(".scope .sr[aria-live]");
     await expect(list).toHaveCount(8);
+    await expect(page.locator(".scope .list li")).toHaveCount(16);
     await expect(page.locator("#sc-h")).toHaveText("What we take on.");
-    await page.getByRole("button", { name: "We turn down" }).click();
-    await expect(page.getByRole("button", { name: "We turn down" })).toHaveAttribute("aria-pressed", "true");
+    await expect(status).toHaveText("");
+    await off.click();
+    await expect(off).toHaveAttribute("aria-pressed", "true");
+    await expect(on).toHaveAttribute("aria-pressed", "false");
     await expect(page.locator("#sc-h")).toHaveText("What we turn down.");
+    await expect(status).toHaveText("Showing what we turn down");
     await expect(list).toHaveCount(8);
     await expect(list.first()).toContainText("Hardware and firmware");
+    await on.click();
+    await expect(on).toHaveAttribute("aria-pressed", "true");
+    await expect(page.locator("#sc-h")).toHaveText("What we take on.");
+    await expect(status).toHaveText("Showing what we take on");
+    await expect(list.first()).toContainText("Web apps and admin consoles");
+    await off.click();
     const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze();
     const bad = axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
     expect(bad.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(" ") + " " + n.failureSummary).join(" | ")}`), "turn down state").toEqual([]);
@@ -329,17 +342,20 @@ test.describe("nav", () => {
 
   test("the five links fit on one line at the narrowest desktop width", async ({ page }) => {
     test.skip((page.viewportSize()?.width ?? 1280) < 900, "desktop only");
-    for (const width of [861, 1024]) {
+    for (const width of [961, 1024, 1280]) {
       await page.setViewportSize({ width, height: 800 });
       await page.goto("/company");
       const r = await page.evaluate(() => {
         const nav = document.querySelector(".nav")!.getBoundingClientRect();
         const as = [...document.querySelectorAll("#mainnav a")].map((a) => a.getBoundingClientRect());
         const lights = document.querySelector(".nav .lights")!.getBoundingClientRect();
-        return { oneLine: new Set(as.map((a) => Math.round(a.top))).size === 1, inside: lights.right <= nav.right, clear: as.at(-1)!.right <= lights.left };
+        return { oneLine: new Set(as.map((a) => Math.round(a.top))).size === 1 && as.every((a) => a.height < 30), inside: lights.right <= nav.right, clear: as.at(-1)!.right <= lights.left };
       });
       expect(r, `width ${width}`).toEqual({ oneLine: true, inside: true, clear: true });
     }
+    await page.setViewportSize({ width: 960, height: 800 });
+    await expect(page.getByRole("button", { name: "Menu" })).toBeVisible();
+    await expect(page.locator("#mainnav")).toBeHidden();
   });
 });
 

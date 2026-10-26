@@ -13,8 +13,9 @@
 .cp .small p + p { margin-top: 18px; }
 .cp .scope .top { display: grid; grid-template-columns: 5fr 7fr; gap: 72px; align-items: end; }
 .cp .scope h2 { margin-bottom: 0; }
-.cp .track button { font-size: 20px; }
+.cp .track button { font-size: 20px; padding-bottom: 16px; letter-spacing: 0; }
 .cp .list { list-style: none; margin-top: 56px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px 72px; min-height: 300px; align-content: start; }
+.cp .list[hidden] { display: none; }
 .cp .list li { animation: in .45s var(--ease) both; }
 .cp .list b { display: block; font-weight: 500; }
 .cp .list span { display: block; color: var(--soft); font-size: 18px; }
