@@ -1,5 +1,5 @@
 /* Company page styles, loaded on /company only. Tokens and shared classes live in app/globals.css. */
-/* Company: the facts, two jobs at a time, and what we take on or turn down. Scoped to the page (.cp) because Home uses .co for its Perth band. */
+/* Company: the facts, a small number of jobs at a time, and what we take on or turn down. Scoped to the page (.cp) because Home uses .co for its Perth band. */
 .cp p, .cp li { font-size: 20px; line-height: 1.55; }
 .cp .phead p { margin-top: 24px; max-width: 560px; }
 .cp .facts { display: grid; gap: 14px; padding-top: 10px; }

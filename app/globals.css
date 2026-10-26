@@ -148,6 +148,12 @@ textarea.field { min-height: 120px; resize: vertical; }
 .pn svg { width: 18px; height: 18px; }
 @keyframes in { from { opacity: 0; transform: translateY(10px); } }
 
+/* A quiet link from a Home band to its page: words in the text colour, the arrow lit */
+.pl { display: inline-flex; align-items: center; gap: 8px; margin-top: 20px; color: var(--fg); text-decoration: none; font-weight: 500; font-size: 16px; }
+.pl svg { width: 18px; height: 18px; color: var(--accent); transition: transform .3s var(--ease); }
+.pl:hover { text-decoration: underline 1px var(--accent); text-underline-offset: 6px; }
+.pl:hover svg { transform: translateX(4px); }
+
 /* Yours to keep: folder */
 .keep .head { display: grid; grid-template-columns: 7fr 5fr; gap: 56px; align-items: end; }
 .keep h2.big2 { font-size: clamp(30px, 3vw, 42px); line-height: 1.1; }
@@ -163,14 +169,6 @@ textarea.field { min-height: 120px; resize: vertical; }
 .rowsx > div { display: grid; grid-template-columns: 200px 1fr; gap: 16px; align-items: baseline; padding: 10px 0; animation: in .4s var(--ease) both; }
 .rowsx dt { font-weight: 500; }
 .rowsx dd { color: var(--soft); }
-
-/* Your records */
-.data .top { display: flex; justify-content: space-between; align-items: end; gap: 24px 40px; flex-wrap: wrap; }
-.data .top .more { margin: 0; padding: 0 0 6px; }
-.data h2 { font-size: clamp(30px, 3vw, 42px); line-height: 1.1; }
-.data dl { display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px; margin-top: 56px; }
-.data dt { font-weight: 500; font-size: 21px; margin-bottom: 10px; }
-.data dd { color: var(--soft); font-size: 18px; }
 
 /* Questions */
 .qa { display: grid; grid-template-columns: 4fr 8fr; gap: 56px; }
@@ -190,12 +188,8 @@ textarea.field { min-height: 120px; resize: vertical; }
 .faq .ans > div { overflow: hidden; }
 .faq .ans p { padding: 0 0 24px; max-width: 680px; }
 
-/* Perth and contact */
-.co h2 { font-size: clamp(30px, 3vw, 42px); line-height: 1.1; }
-.co .under { display: grid; grid-template-columns: 7fr 5fr; gap: 56px; margin-top: 48px; }
-.co dl { font-size: 18px; }
-.co dl div { display: grid; grid-template-columns: 92px 1fr; gap: 16px; padding: 10px 0; }
-.co dt { color: var(--muted); }
+/* Contact */
+.ct .cl { margin-top: 32px; max-width: 420px; color: var(--soft); font-size: 16px; }
 .ct .wrap { display: grid; grid-template-columns: 5fr 7fr; gap: 56px; }
 .nexth { margin-top: 40px; font-size: 16px; color: var(--muted); }
 .next { list-style: none; margin-top: 10px; }
@@ -279,7 +273,7 @@ textarea.field { min-height: 120px; resize: vertical; }
 @media (max-width: 860px) {
   :root { --gut: 16px; }
   .band { padding: 88px 0; }
-  .what .grid, .detail, .sheet, .qa, .ct .wrap, .keep .head, .co .under, .data dl, .form { grid-template-columns: 1fr; }
+  .what .grid, .detail, .sheet, .qa, .ct .wrap, .keep .head, .form { grid-template-columns: 1fr; }
   .phead { padding: 140px 0 72px; }
   .phead .wrap, .sides, .sqa .wrap { grid-template-columns: 1fr; gap: 32px; }
   .side { padding: 24px; }
@@ -297,10 +291,10 @@ textarea.field { min-height: 120px; resize: vertical; }
   .detail .p { font-size: 19px; }
   .faq h3 { font-size: 19px; }
   .sheet { padding: 28px; }
-  .data dl { gap: 28px; margin-top: 48px; }
   .foot .row .end { margin-left: 0; }
   .prose { padding: 112px var(--gut) 72px; }
   .prose h1 { font-size: 30px; }
+  .ct .cl { font-size: 18px; color: var(--fg); }
 }
 @media (max-width: 480px) {
   .nav .word { display: none; }

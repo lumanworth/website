@@ -4,7 +4,7 @@ import Scope from "@/components/Scope";
 
 export const metadata: Metadata = {
   title: "Company",
-  description: "A small software company in Perth. Two jobs at a time, what we take on, and what we turn down.",
+  description: "A small software company in Perth. A small number of jobs at a time, what we take on, and what we turn down.",
   alternates: { canonical: "/company" },
   openGraph: {
     title: "Company, Lumanworth",
@@ -35,7 +35,7 @@ export default function Company() {
 
       <section className="small band ta" aria-labelledby="s-h">
         <div className="wrap">
-          <h2 className="s" id="s-h" data-r>Two jobs at a time.</h2>
+          <h2 className="s" id="s-h" data-r>A small number of jobs at a time.</h2>
           <div data-r>
             <p>A senior engineer runs each job from the first meeting to handover. The person you meet is the person who builds yours, and the one who answers when you ask.</p>
             <p>AI is a tool here, used the way a good engineer uses any tool. It drafts and checks under direction. Nothing merges or goes live without a person reading it and approving it.</p>

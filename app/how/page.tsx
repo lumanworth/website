@@ -39,7 +39,7 @@ export default function How() {
             <h2 className="s" id="q-h" data-r>Small on purpose.</h2>
           </div>
           <div data-r>
-            <p className="lede">Two jobs at a time, so the person you meet is the person who builds yours.</p>
+            <p className="lede">A small number of jobs at a time, so the person you meet is the person who builds yours.</p>
             <a className="btn" href="/#contact">Start a project<Arrow /></a>
           </div>
         </div>

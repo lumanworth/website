@@ -45,6 +45,17 @@ test.describe("home", () => {
     await expect(page.locator("text=0419")).toHaveCount(0);
   });
 
+  test("trimmed: records and Perth live on their pages, bands alternate, page links and the clients line", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.locator("#data, #company")).toHaveCount(0);
+    const tones = await page.locator("main > section").evaluateAll((s) => s.map((x) => (x.classList.contains("ta") ? "ta" : "tb")));
+    expect(tones).toEqual(["ta", "tb", "ta", "tb", "ta", "tb"]);
+    await expect(page.locator("footer")).toHaveClass(/\bta\b/);
+    await expect(page.locator("#what a.pl[href='/what']")).toHaveText("All of what we do");
+    await expect(page.locator("#how a.pl[href='/how']")).toHaveText("The full process");
+    await expect(page.locator("#contact .cl")).toHaveText("Most of our work comes by introduction. We do not publish client names.");
+  });
+
   test("the folder, the steps and the questions work by keyboard and click", async ({ page }) => {
     await page.goto("/");
     const first = page.getByRole("tab", { name: "In your name" });
@@ -160,9 +171,9 @@ test.describe("security and data", () => {
     await expect(page.locator("header.nav")).toHaveClass(/\bta\b/);
   });
 
-  test("home and footer link to the page", async ({ page }) => {
+  test("the nav and footer link to the page", async ({ page }) => {
     await page.goto("/");
-    await expect(page.locator("#data a[href='/security']")).toHaveCount(1);
+    await expect(page.locator("#mainnav a[href='/security']")).toHaveCount(1);
     await expect(page.locator("footer a[href='/security']")).toHaveCount(1);
   });
 });
@@ -299,6 +310,7 @@ test.describe("company", () => {
     await expect(page.locator("header.nav")).toHaveClass(/\btb\b/);
     await expect(page.locator(".facts")).toContainText("Lumanworth Pty Ltd");
     await expect(page.locator(".facts")).toContainText("On registration");
+    await expect(page.locator("#s-h")).toHaveText("A small number of jobs at a time.");
     const list = page.locator(".scope .list:visible li");
     const on = page.getByRole("button", { name: "We take on" });
     const off = page.getByRole("button", { name: "We turn down" });
