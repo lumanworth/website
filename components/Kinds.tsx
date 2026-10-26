@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Arrow from "./Arrow";
+import { Pause, Play } from "./PlayPause";
 import { KINDS, type Kind } from "@/lib/words";
 
 const DUR = 7000;
@@ -19,7 +20,8 @@ function Body({ k }: { k: Kind }) {
   );
 }
 
-/* What we do: a list and a panel. The active line fills as a timer and moves on by itself, until someone points at one.
+/* What we do: a list and a panel. The active line fills as a timer and moves on by itself, until someone points at one or presses pause
+   (WCAG 2.2.2); play starts the current line again. The button sits top right of the panel, and under the list on phones where the panel is hidden.
    Every kind sits in the same grid cell of the panel, so the panel is as tall as the longest and never jumps. On phones the words open under the line. */
 export default function Kinds() {
   const [act, setAct] = useState(0);
@@ -32,6 +34,7 @@ export default function Kinds() {
     lines.current.forEach((l, i) => { if (l && i !== act) l.style.width = "0"; });
     if (!ln) return;
     if (held || matchMedia("(prefers-reduced-motion: reduce)").matches) { ln.style.width = "100%"; return; }
+    ln.style.width = "0";
     let t0 = performance.now(), inView = false, raf = 0;
     const io = new IntersectionObserver(([e]) => { inView = e.isIntersecting; }, { threshold: 0.4 });
     if (section.current) io.observe(section.current);
@@ -48,9 +51,12 @@ export default function Kinds() {
   }, [act, held]);
 
   const hold = (i: number) => { setHeld(true); setAct(i); };
+  const pz = (where: string) => (
+    <button type="button" className={`pz ${where}`} aria-label={held ? "Play" : "Pause"} onClick={() => setHeld((h) => !h)}>{held ? <Play /> : <Pause />}</button>
+  );
 
   return (
-    <section className="what band tb" id="what" aria-labelledby="what-h" ref={section} onFocus={() => setHeld(true)}>
+    <section className="what band tb" id="what" aria-labelledby="what-h" ref={section} onFocus={(e) => { if (!(e.target as HTMLElement).classList.contains("pz")) setHeld(true); }}>
       <div className="wrap grid">
         <div>
           <h2 className="s" id="what-h" data-r>What we do</h2>
@@ -68,8 +74,10 @@ export default function Kinds() {
               </li>
             ))}
           </ul>
+          {pz("ph")}
         </div>
         <div className="panel ts">
+          {pz("pd")}
           {KINDS.map((k, i) => (
             <div key={k.h} id={`kind-${i}`} className={i === act ? "in on" : "in"} inert={i !== act}>
               <p className="k">{k.h}</p>

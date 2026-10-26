@@ -8,7 +8,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: "https://lumanworth.com/what", lastModified: new Date("2026-10-26"), priority: 0.7 },
     { url: "https://lumanworth.com/how", lastModified: new Date("2026-10-26"), priority: 0.7 },
     { url: "https://lumanworth.com/security", lastModified: new Date("2026-10-26"), priority: 0.7 },
-    { url: "https://lumanworth.com/privacy", lastModified: updated, priority: 0.3 },
+    { url: "https://lumanworth.com/privacy", lastModified: new Date("2026-10-26"), priority: 0.3 },
     { url: "https://lumanworth.com/terms", lastModified: updated, priority: 0.3 },
   ];
 }

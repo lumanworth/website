@@ -114,6 +114,14 @@ textarea.field { min-height: 120px; resize: vertical; }
 .panel .in { grid-area: 1 / 1; display: flex; flex-direction: column; opacity: 0; visibility: hidden; transform: translateY(8px); transition: opacity .3s var(--ease), transform .3s var(--ease), visibility .3s; }
 .panel .in.on { opacity: 1; visibility: visible; transform: none; transition-delay: .16s; }
 .panel .k { font-size: 14px; color: var(--muted); margin-bottom: 14px; }
+/* Pause for the timer: the site's round button, top right of the panel; under the list on phones. Hidden under reduced motion, where nothing moves. */
+.pz { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); background: none; color: var(--fg); display: grid; place-items: center; cursor: pointer; transition: border-color .3s; }
+.pz:hover { border-color: var(--accent); }
+.pz:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.pz svg { width: 16px; height: 16px; }
+.panel .pz { position: absolute; top: 24px; right: 24px; z-index: 1; }
+.pz.ph { display: none; }
+@media (prefers-reduced-motion: reduce) { .what .pz.pz { display: none; } }
 .p { font-size: 19px; line-height: 1.5; }
 .ba { margin-top: 32px; }
 .ba > div { display: grid; grid-template-columns: 92px 1fr; gap: 16px; padding: 10px 0; }
@@ -282,6 +290,7 @@ textarea.field { min-height: 120px; resize: vertical; }
   .track button { font-size: 18px; }
   .rowsx > div { grid-template-columns: 1fr; gap: 2px; }
   .panel { display: none; }
+  .pz.ph { display: grid; margin: 16px 0 0 auto; }
   .kinds .mob { display: block; max-height: 0; overflow: hidden; transition: max-height .5s var(--ease); }
   .kinds li.act .mob { max-height: 640px; }
   .kinds .mob > * { margin-top: 14px; }
