@@ -1,7 +1,7 @@
 import { expect, test, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
-const pages = ["/", "/what", "/how", "/security", "/privacy", "/terms"];
+const pages = ["/", "/what", "/how", "/security", "/company", "/privacy", "/terms"];
 
 async function noOverflow(page: Page) {
   const [sw, iw] = await page.evaluate(() => [document.documentElement.scrollWidth, innerWidth]);
@@ -289,6 +289,57 @@ test.describe("what we do", () => {
     await expect(page.locator("#ai .src")).toHaveClass(/\bon\b/, { timeout: 6000 });
     await expect(page.locator("#ai .answer .a")).toHaveText("SAE 15W-40. About 38 litres with a new filter.");
     await expect(page.locator("#ai .sr")).toHaveText("");
+  });
+});
+
+test.describe("company", () => {
+  test("facts, and the switch between take on and turn down", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/company");
+    await expect(page.locator("header.nav")).toHaveClass(/\btb\b/);
+    await expect(page.locator(".facts")).toContainText("Lumanworth Pty Ltd");
+    await expect(page.locator(".facts")).toContainText("On registration");
+    const list = page.locator(".scope .list li");
+    await expect(list).toHaveCount(8);
+    await expect(page.locator("#sc-h")).toHaveText("What we take on.");
+    await page.getByRole("button", { name: "We turn down" }).click();
+    await expect(page.getByRole("button", { name: "We turn down" })).toHaveAttribute("aria-pressed", "true");
+    await expect(page.locator("#sc-h")).toHaveText("What we turn down.");
+    await expect(list).toHaveCount(8);
+    await expect(list.first()).toContainText("Hardware and firmware");
+    const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze();
+    const bad = axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
+    expect(bad.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(" ") + " " + n.failureSummary).join(" | ")}`), "turn down state").toEqual([]);
+  });
+});
+
+test.describe("nav", () => {
+  test("links to the pages and marks the current one", async ({ page }) => {
+    for (const [path, label] of [["/what", "What we do"], ["/how", "How we work"], ["/security", "Security and data"], ["/company", "Company"]]) {
+      await page.goto(path);
+      const current = page.locator("#mainnav a[aria-current='page']");
+      await expect(current).toHaveCount(1);
+      await expect(current).toHaveText(label);
+      await expect(current).toHaveAttribute("href", path);
+    }
+    await page.goto("/");
+    await expect(page.locator("#mainnav a[aria-current='page']")).toHaveCount(0);
+    await expect(page.locator("#mainnav a[href='/#contact']")).toHaveCount(1);
+  });
+
+  test("the five links fit on one line at the narrowest desktop width", async ({ page }) => {
+    test.skip((page.viewportSize()?.width ?? 1280) < 900, "desktop only");
+    for (const width of [861, 1024]) {
+      await page.setViewportSize({ width, height: 800 });
+      await page.goto("/company");
+      const r = await page.evaluate(() => {
+        const nav = document.querySelector(".nav")!.getBoundingClientRect();
+        const as = [...document.querySelectorAll("#mainnav a")].map((a) => a.getBoundingClientRect());
+        const lights = document.querySelector(".nav .lights")!.getBoundingClientRect();
+        return { oneLine: new Set(as.map((a) => Math.round(a.top))).size === 1, inside: lights.right <= nav.right, clear: as.at(-1)!.right <= lights.left };
+      });
+      expect(r, `width ${width}`).toEqual({ oneLine: true, inside: true, clear: true });
+    }
   });
 });
 

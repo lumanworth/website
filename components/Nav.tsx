@@ -7,6 +7,9 @@ import Symbol from "./Symbol";
 /* Inner pages open on tb (the opposite tone to Home), so the server sends the right glass and the first paint does not fade. */
 const OPENS_TB = new Set(["/security", "/how", "/what", "/company"]);
 
+/* The four inner pages, then Contact on Home. */
+const LINKS: [string, string][] = [["/what", "What we do"], ["/how", "How we work"], ["/security", "Security and data"], ["/company", "Company"], ["/#contact", "Contact"]];
+
 type ThemedDocument = Document & { startViewTransition?: (update: () => void) => unknown };
 
 export default function Nav() {
@@ -77,11 +80,9 @@ export default function Nav() {
       </a>
       <nav aria-label="Main" id="mainnav">
         <ul onClick={() => setOpen(false)}>
-          <li><a href="/#what">What we do</a></li>
-          <li><a href="/#how">How we work</a></li>
-          <li><a href="/#yours">Yours</a></li>
-          <li><a href="/#faq">Questions</a></li>
-          <li><a href="/#contact">Contact</a></li>
+          {LINKS.map(([href, label]) => (
+            <li key={href}><a href={href} aria-current={href === path ? "page" : undefined}>{label}</a></li>
+          ))}
         </ul>
       </nav>
       <button className="sw lights" type="button" aria-pressed={light} onClick={toggleLights}>Lights</button>
