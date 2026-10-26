@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
+import { OG_BASE } from "@/lib/meta";
 
 export const metadata: Metadata = {
   title: "Privacy",
   description: "How Lumanworth handles the information people send us and what this website collects.",
+  alternates: { canonical: "/privacy" },
+  openGraph: { ...OG_BASE, title: "Privacy, Lumanworth", description: "How Lumanworth handles the information people send us and what this website collects.", url: "/privacy" },
 };
 
 export default function Privacy() {

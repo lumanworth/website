@@ -3,7 +3,7 @@ import { JetBrains_Mono, Manrope } from "next/font/google";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import Reveal from "@/components/Reveal";
-import { OG_BASE } from "@/lib/meta";
+import { OG_BASE, TAGLINE } from "@/lib/meta";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   openGraph: {
     ...OG_BASE,
     title: "Lumanworth",
-    description: "Built to last. Yours to keep. A Perth software company.",
+    description: TAGLINE,
   },
   robots: { index: true, follow: true },
 };
