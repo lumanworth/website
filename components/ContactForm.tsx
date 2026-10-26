@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { WHEN } from "@/lib/contact";
-import { NEXT } from "@/lib/words";
+import { CLIENTS, NEXT } from "@/lib/words";
 import Arrow from "./Arrow";
 
 type State = "idle" | "sending" | "sent" | "unavailable" | "failed";
@@ -50,6 +50,7 @@ export default function ContactForm() {
           <ol className="next" aria-labelledby="next-h" data-r>
             {NEXT.map((n, i) => <li key={n}><span className="mono" aria-hidden="true">{i + 1}</span>{n}</li>)}
           </ol>
+          <p className="cl" data-r>{CLIENTS}</p>
         </div>
         <div data-r>
           <form className="form" onSubmit={onSubmit} noValidate>

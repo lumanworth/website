@@ -55,6 +55,7 @@ export default function Steps() {
       <div className="wrap">
         <h2 className="s" id="how-h" data-r>How we work</h2>
         <p className="lede" data-r>Five steps, every job, any size. Each one ends with something in your hands and a decision that is yours.</p>
+        <a className="pl" href="/how" data-r>The full process<Arrow /></a>
         <div className="scrub">
           <div className="rail"><i style={{ width: `${(cur / last) * 100}%` }} /></div>
           <div className="nodes" role="tablist" aria-label="Steps">

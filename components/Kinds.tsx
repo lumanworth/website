@@ -55,6 +55,7 @@ export default function Kinds() {
         <div>
           <h2 className="s" id="what-h" data-r>What we do</h2>
           <p className="lede" data-r>We take the parts of a business that run on spreadsheets, paper, phone calls and memory, and turn them into systems people actually use.</p>
+          <a className="pl" href="/what" data-r>All of what we do<Arrow /></a>
           <ul className="kinds">
             {KINDS.map((k, i) => (
               <li key={k.h} className={i === act ? "act" : undefined}>

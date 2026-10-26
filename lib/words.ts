@@ -116,12 +116,6 @@ export const OWN: Own[] = [
   },
 ];
 
-export const PROMISES: [string, string][] = [
-  ["Made up data", "We build and test on made up data, never your real records."],
-  ["Guest access", "We work in your accounts as a guest you can remove at any time."],
-  ["Deleted at the close", "We delete our copies of your information within 30 days of the last handover."],
-];
-
 export const FAQ: Faq[] = [
   {
     q: "What does it cost?",
@@ -149,8 +143,7 @@ export const FAQ: Faq[] = [
   },
 ];
 
-export const COMPANY =
-  "A small software company, privately owned and run by its founder. The person you meet is the person who designs and builds it, from the first email to the handover.";
+export const CLIENTS = "Most of our work comes by introduction. We do not publish client names.";
 
 export const NEXT = [
   "We reply within one business day.",

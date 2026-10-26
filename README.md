@@ -4,7 +4,12 @@ The Lumanworth website. Next.js (App Router), React, TypeScript, hand written CS
 
 ## Pages
 
-- `/` Home: the lines hero, What we do, How we work, Yours to keep, your records, questions, Perth, Start a project (words in `lib/words.ts`)
+- `/` Home: the lines hero, What we do, How we work, Yours to keep, questions, Start a project (words in `lib/words.ts`)
+- `/what` What we do, with one working example per kind of work
+- `/how` How we work, the ten stages under the five steps
+- `/security` Security and data, with the two statement PDFs in `public/docs`
+- `/company` Company: the facts, how we work in small numbers, what we take on and turn down
+- Each inner page has its own stylesheet next to its `page.tsx`; tokens and shared classes live in `app/globals.css`
 - `/privacy` and `/terms`
 - `/api/contact` receives the form and sends it to the support mailbox
 

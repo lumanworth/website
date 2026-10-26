@@ -9,7 +9,7 @@ export default function Questions() {
   const flip = (i: number) => setOpen((o) => o.map((v, j) => (j === i ? !v : v)));
 
   return (
-    <section className="band tb" id="faq" aria-labelledby="qa-h">
+    <section className="band ta" id="faq" aria-labelledby="qa-h">
       <div className="wrap qa">
         <div>
           <h2 className="s" id="qa-h" data-r>Questions people ask</h2>
