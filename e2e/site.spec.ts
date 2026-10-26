@@ -422,7 +422,7 @@ test("privacy names no providers and says where data goes", async ({ page }) => 
   await page.goto("/privacy");
   const text = await page.locator("main").innerText();
   expect(text).not.toMatch(/Vercel|Resend/);
-  expect(text).toContain("including in the United States");
+  expect(text).toContain("including in the United States and Japan.");
   expect(text).toContain("Our hosting provider receives your IP address");
 });
 
