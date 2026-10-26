@@ -344,7 +344,34 @@ test.describe("company", () => {
   });
 });
 
+test.describe("open graph", () => {
+  for (const path of pages) {
+    test(`${path} carries the base fields`, async ({ page }) => {
+      await page.goto(path);
+      const og = (p: string) => page.locator(`meta[property="og:${p}"]`);
+      const url = `https://lumanworth.com${path === "/" ? "" : path}`;
+      await expect(og("type")).toHaveAttribute("content", "website");
+      await expect(og("site_name")).toHaveAttribute("content", "Lumanworth");
+      await expect(og("locale")).toHaveAttribute("content", "en_AU");
+      await expect(og("title")).toHaveAttribute("content", await page.title());
+      await expect(og("url")).toHaveAttribute("content", url);
+      await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", url);
+    });
+  }
+});
+
 test.describe("nav", () => {
+  test("hover underlines a link and keeps its colour", async ({ page }, info) => {
+    test.skip(info.project.name !== "desktop", "hover needs the inline nav");
+    await page.goto("/what");
+    const link = page.locator("#mainnav a[href='/how']");
+    const before = await link.evaluate((a) => getComputedStyle(a).color);
+    expect(await link.evaluate((a) => getComputedStyle(a).textDecorationLine)).toBe("none");
+    await link.hover();
+    await expect.poll(() => link.evaluate((a) => getComputedStyle(a).textDecorationLine)).toBe("underline");
+    expect(await link.evaluate((a) => getComputedStyle(a).color)).toBe(before);
+  });
+
   test("links to the pages and marks the current one", async ({ page }) => {
     for (const [path, label] of [["/what", "What we do"], ["/how", "How we work"], ["/security", "Security and data"], ["/company", "Company"]]) {
       await page.goto(path);

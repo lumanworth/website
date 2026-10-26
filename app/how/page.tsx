@@ -3,12 +3,14 @@ import "./how.css";
 import Arrow from "@/components/Arrow";
 import Journey from "@/components/Journey";
 import Symbol from "@/components/Symbol";
+import { OG_BASE } from "@/lib/meta";
 
 export const metadata: Metadata = {
   title: "How we work",
   description: "Five steps on every job, and the ten stages under them, from the first email to the day we delete our copies.",
   alternates: { canonical: "/how" },
   openGraph: {
+    ...OG_BASE,
     title: "How we work, Lumanworth",
     description: "Five steps on every job, any size, and the ten stages under them.",
     url: "/how",

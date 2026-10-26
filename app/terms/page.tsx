@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
+import { OG_BASE } from "@/lib/meta";
 
 export const metadata: Metadata = {
   title: "Terms of use",
   description: "The terms on which you may use the Lumanworth website.",
+  alternates: { canonical: "/terms" },
+  openGraph: { ...OG_BASE, title: "Terms of use, Lumanworth", description: "The terms on which you may use the Lumanworth website.", url: "/terms" },
 };
 
 export default function Terms() {

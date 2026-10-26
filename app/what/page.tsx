@@ -5,12 +5,14 @@ import Ask from "@/components/Ask";
 import Mapped from "@/components/Mapped";
 import Record from "@/components/Record";
 import Signal from "@/components/Signal";
+import { OG_BASE } from "@/lib/meta";
 
 export const metadata: Metadata = {
   title: "What we do",
   description: "Business systems, workflow and consulting, AI in the workflow, websites and apps. Built, checked and handed over.",
   alternates: { canonical: "/what" },
   openGraph: {
+    ...OG_BASE,
     title: "What we do, Lumanworth",
     description: "Four kinds of work. Most jobs touch more than one.",
     url: "/what",
