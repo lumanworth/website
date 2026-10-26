@@ -60,7 +60,7 @@ export default function Ask() {
       </ol>
       <div className="answer">
         <p className="a">{x.a.slice(0, chars)}{!complete && lines === x.trace.length && <span className="cur" aria-hidden="true" />}</p>
-        <p className={complete ? "src mono on" : "src mono"}>{x.src}</p>
+        <p className={complete ? "src mono on" : "src mono"} aria-hidden={complete ? undefined : true}>{x.src}</p>
       </div>
       <p className="sr" aria-live="polite">{said}</p>
     </div>

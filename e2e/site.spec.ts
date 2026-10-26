@@ -26,7 +26,7 @@ test.describe("pages", () => {
       expect(errors, "console errors").toEqual([]);
       expect(offsite, "third party requests").toEqual([]);
 
-      const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa"]).analyze();
+      const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze();
       const serious = axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
       expect(serious.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(" ")).join(", ")}`)).toEqual([]);
     });
@@ -144,7 +144,7 @@ test.describe("security and data", () => {
     await expect(page.locator(".side").first().locator("li", { hasText: "Credentials" })).toContainText("your own vault");
     await expect(ours.filter({ hasText: "Invoices" })).toHaveCount(1);
     await page.emulateMedia({ reducedMotion: "reduce" });
-    const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa"]).analyze();
+    const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze();
     expect(axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id), "after handover state").toEqual([]);
     for (const f of ["/docs/data-handling.pdf", "/docs/security.pdf"]) {
       const res = await request.get(f);
@@ -188,7 +188,7 @@ test.describe("how we work", () => {
     await page.getByRole("button", { name: "A website" }).click();
     await expect(panel.locator("h3")).toHaveText("Build");
     await expect(panel).not.toContainText("repeat for each build phase");
-    const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa"]).analyze();
+    const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze();
     expect(axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id), "website track").toEqual([]);
     await page.reload();
     await expect(page.getByRole("button", { name: "A website" })).toHaveAttribute("aria-pressed", "true");
@@ -260,9 +260,12 @@ test.describe("what we do", () => {
     await expect(tot).toContainText("5 min");
     await expect(page.locator("#flow .steps li.gone")).toHaveCount(4);
     await expect(page.locator("#flow .sr")).toHaveText("Redesigned: 4 steps taken out, 5 minutes of office time on each job.");
+    const clipped = (sel: string) => page.locator(sel).evaluateAll((ls) => ls.filter((l) => l.scrollHeight > l.clientHeight + 1).length);
+    await expect.poll(() => clipped("#flow .steps li:not(.gone)"), { message: "kept steps clipped" }).toBe(0);
     await page.getByRole("button", { name: "Mapped" }).click();
     await expect(tot).toContainText("33 min");
     await expect(page.locator("#flow .steps li.cut")).toHaveCount(0);
+    await expect.poll(() => clipped("#flow .steps li"), { message: "mapped steps clipped" }).toBe(0);
 
     await page.getByRole("button", { name: "What torque for the bucket pin bolts?" }).click();
     await expect(page.locator("#ai .answer")).toContainText("No source, so no answer");
@@ -274,7 +277,7 @@ test.describe("what we do", () => {
     await expect(page.locator("#web .figs")).toContainText("2.4 s");
     await expect(page.locator("#web .figs")).toContainText("4.8 s");
 
-    const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa"]).analyze();
+    const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze();
     expect(axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id), "after clicks").toEqual([]);
   });
 

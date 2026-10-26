@@ -256,7 +256,8 @@ export const ASKS: Ask[] = [
   { q: "What torque for the bucket pin bolts?", a: "Not in the operator manual or your job history. Check the service manual, or ask the dealer.", src: "No source, so no answer", trace: ["operator manual and 412 jobs searched", "0 passages matched", "answer withheld"] },
 ];
 
-/* The sample page on a slow network. Server rendered words (18 KB) land first, the photo (120 KB) after.
+/* The sample page on a slow network. Server rendered words (18 KB) land first, the photo (120 KB) after; CSS, font and script
+   make up the other 22 KB of the 160 KB.
    Slow 4G as Lighthouse throttles it, 150 ms round trip at 1.6 Mbps; 3G at 400 ms and 400 kbps. */
 export const NETWORKS = { "4g": { name: "Slow 4G", words: 0.9, done: 1.5 }, "3g": { name: "3G", words: 2.4, done: 4.8 } } as const;
 export const PAGE_KB = 160;
