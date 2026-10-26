@@ -1,7 +1,7 @@
 import { expect, test, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
-const pages = ["/", "/how", "/security", "/privacy", "/terms"];
+const pages = ["/", "/what", "/how", "/security", "/privacy", "/terms"];
 
 async function noOverflow(page: Page) {
   const [sw, iw] = await page.evaluate(() => [document.documentElement.scrollWidth, innerWidth]);
@@ -237,6 +237,55 @@ test.describe("how we work", () => {
   test("the nav opens in the tone of the head", async ({ page }) => {
     await page.goto("/how");
     await expect(page.locator("header.nav")).toHaveClass(/\btb\b/);
+  });
+});
+
+test.describe("what we do", () => {
+  test("each example works when clicked", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/what");
+    await expect(page.locator("header.nav")).toHaveClass(/\btb\b/);
+    for (const id of ["sys", "flow", "ai", "web"]) await expect(page.locator(`.idx a[href='#${id}']`)).toHaveCount(1);
+
+    const events = page.locator("#sys .ev li");
+    await expect(events).toHaveCount(10);
+    await page.getByRole("button", { name: "Play again" }).click();
+    await expect(events).toHaveCount(10);
+    await expect(events.filter({ hasText: "no signal" })).toHaveCount(1);
+    await expect(events.last()).toContainText("invoice.paid");
+
+    const tot = page.locator("#flow .tot");
+    await expect(tot).toContainText("33 min");
+    await page.getByRole("button", { name: "Redesigned" }).click();
+    await expect(tot).toContainText("5 min");
+    await expect(page.locator("#flow .steps li.gone")).toHaveCount(4);
+    await expect(page.locator("#flow .sr")).toHaveText("Redesigned: 4 steps taken out, 5 minutes of office time on each job.");
+    await page.getByRole("button", { name: "Mapped" }).click();
+    await expect(tot).toContainText("33 min");
+    await expect(page.locator("#flow .steps li.cut")).toHaveCount(0);
+
+    await page.getByRole("button", { name: "What torque for the bucket pin bolts?" }).click();
+    await expect(page.locator("#ai .answer")).toContainText("No source, so no answer");
+    await expect(page.locator("#ai .trace")).toContainText("answer withheld");
+    await expect(page.locator("#ai .sr")).toContainText("Not in the operator manual");
+
+    await page.getByRole("button", { name: "3G" }).click();
+    await expect(page.getByRole("button", { name: "3G" })).toHaveAttribute("aria-pressed", "true");
+    await expect(page.locator("#web .figs")).toContainText("2.4 s");
+    await expect(page.locator("#web .figs")).toContainText("4.8 s");
+
+    const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa"]).analyze();
+    expect(axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id), "after clicks").toEqual([]);
+  });
+
+  test("the record and the answer play once in view", async ({ page }) => {
+    await page.goto("/what");
+    await page.locator("#sys .ev").scrollIntoViewIfNeeded();
+    await expect(page.locator("#sys .ev li")).toHaveCount(10, { timeout: 9000 });
+    await page.locator("#ai .answer").scrollIntoViewIfNeeded();
+    await expect(page.locator("#ai .src")).toHaveClass(/\bon\b/, { timeout: 6000 });
+    await expect(page.locator("#ai .answer .a")).toHaveText("SAE 15W-40. About 38 litres with a new filter.");
+    await expect(page.locator("#ai .sr")).toHaveText("");
   });
 });
 

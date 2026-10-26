@@ -219,3 +219,44 @@ export const STAGES: Stage[] = [
   { h: "After", p: "Defects fixed free for 30 days after go live. We do not host it or sell support.", get: "Our time, only if you want it." },
   { h: "Close", p: "We delete our copies of your information within 30 days.", get: "Nothing of yours left with us." },
 ];
+
+/* What we do: the four demos. Sample names only. Every figure must add up; tests/words.test.ts checks it. */
+export type Event = { a: string; e: string; who: string; t: string; off?: true };
+export const EVENTS: Event[] = [
+  { a: "Booked on the website", e: "job.created", who: "Customer", t: "9:12 am" },
+  { a: "Priced by your rules", e: "price.applied", who: "System", t: "9:12 am" },
+  { a: "Approved", e: "job.approved", who: "Mia, office", t: "9:20 am" },
+  { a: "Assigned to a technician", e: "job.assigned", who: "Mia, office", t: "9:21 am" },
+  { a: "Customer told by text", e: "notify.sent", who: "System", t: "9:21 am" },
+  { a: "Completed on site", e: "job.completed", who: "Tom, technician", t: "2:05 pm", off: true },
+  { a: "Access note changed by the office", e: "job.updated", who: "Mia, office", t: "2:30 pm" },
+  { a: "Synced, one conflict settled by rule", e: "sync.applied", who: "System", t: "3:40 pm" },
+  { a: "Invoice sent from the job", e: "invoice.sent", who: "System", t: "3:40 pm" },
+  { a: "Paid by card link", e: "invoice.paid", who: "Customer", t: "3:52 pm" },
+];
+
+/* A day in the office, mapped, then redesigned. A step with no "after" is taken out. Minutes are office time on each job. */
+export type MapStep = { before: string; mins: number; after?: { h: string; mins: number } };
+export const MAP_STEPS: MapStep[] = [
+  { before: "Customer rings the office", mins: 4, after: { h: "Customer books online, or the office takes the call", mins: 2 } },
+  { before: "Details written on the whiteboard", mins: 2 },
+  { before: "Typed into the job spreadsheet", mins: 3 },
+  { before: "Texted to the technician", mins: 2, after: { h: "Job and address appear on the technician's phone", mins: 0 } },
+  { before: "Technician rings back for the address", mins: 3 },
+  { before: "Paper job sheet typed up on Friday", mins: 6 },
+  { before: "Invoice built from the job sheet", mins: 8, after: { h: "Job sheet becomes the invoice, office checks it", mins: 2 } },
+  { before: "Payment chased by phone", mins: 5, after: { h: "Customer pays by card link", mins: 1 } },
+];
+
+/* Answers from the operator manual and the job history. The third has no source, so it is withheld. */
+export type Ask = { q: string; a: string; src: string; trace: string[] };
+export const ASKS: Ask[] = [
+  { q: "What oil does the loader engine take?", a: "SAE 15W-40. About 38 litres with a new filter.", src: "Source: operator manual, page 112, refill capacities", trace: ["operator manual, 286 pages, searched", "3 passages matched", "citation check passed"] },
+  { q: "When was the loader last serviced?", a: "12 October. The 500 hour service, by Sam Ortiz.", src: "Source: job 1182", trace: ["412 job records searched", "1 record matched", "citation check passed"] },
+  { q: "What torque for the bucket pin bolts?", a: "Not in the operator manual or your job history. Check the service manual, or ask the dealer.", src: "No source, so no answer", trace: ["operator manual and 412 jobs searched", "0 passages matched", "answer withheld"] },
+];
+
+/* The sample page on a slow network. Server rendered words (18 KB) land first, the photo (120 KB) after.
+   Slow 4G as Lighthouse throttles it, 150 ms round trip at 1.6 Mbps; 3G at 400 ms and 400 kbps. */
+export const NETWORKS = { "4g": { name: "Slow 4G", words: 0.9, done: 1.5 }, "3g": { name: "3G", words: 2.4, done: 4.8 } } as const;
+export const PAGE_KB = 160;
