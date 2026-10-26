@@ -1,11 +1,15 @@
+import Arrow from "./Arrow";
 import { COMPANY, PROMISES } from "@/lib/words";
 
-/* Your records, then Perth: two bands, no client names. The link to Security and data lands with that page. */
+/* Your records, then Perth: two bands, no client names. The records band links to Security and data. */
 export function Records() {
   return (
     <section className="band ta" id="data" aria-labelledby="data-h">
       <div className="wrap data">
-        <h2 id="data-h" data-r>Your records never<br />reach our tools.</h2>
+        <div className="top">
+          <h2 id="data-h" data-r>Your records never<br />reach our tools.</h2>
+          <a className="more" href="/security" data-r>How we handle data<Arrow /></a>
+        </div>
         <dl data-r>
           {PROMISES.map(([k, v]) => (
             <div key={k}><dt>{k}</dt><dd>{v}</dd></div>

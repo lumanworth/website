@@ -157,3 +157,43 @@ export const NEXT = [
   "One meeting about your work, not our tools. No charge.",
   "A brief in plain words, with a price range.",
 ];
+
+/* Security and data: two moments. k keys a row so it can glide from one side to the other; f marks never (1) or gone (2). No provider names. */
+export type SideRow = { k: string; h: string; d: string; f?: 1 | 2 };
+export type Moment = { yours: SideRow[]; ours: SideRow[] };
+export const SIDES: Record<"build" | "after", Moment> = {
+  build: {
+    yours: [
+      { k: "code", h: "Code", d: "In your repository" },
+      { k: "db", h: "Database and files", d: "Your account" },
+      { k: "bk", h: "Backups", d: "Run by your provider" },
+      { k: "dom", h: "Domain and app stores", d: "In your name" },
+      { k: "acc", h: "Our access", d: "Named people, own logins, multi factor sign in" },
+    ],
+    ours: [
+      { k: "cred", h: "Credentials", d: "An encrypted vault, one folder for you" },
+      { k: "mail", h: "Emails and documents", d: "Company mail, never personal accounts" },
+      { k: "real", h: "Your real records", d: "Never here", f: 1 },
+    ],
+  },
+  after: {
+    yours: [
+      { k: "code", h: "Code", d: "In your repository" },
+      { k: "db", h: "Database and files", d: "Your account" },
+      { k: "bk", h: "Backups", d: "Run by your provider" },
+      { k: "dom", h: "Domain and app stores", d: "In your name" },
+      { k: "cred", h: "Credentials", d: "Moved into your own vault" },
+      { k: "acc", h: "Our access", d: "Removed, and confirmed in writing", f: 2 },
+    ],
+    ours: [
+      { k: "mail", h: "Emails and documents", d: "Deleted within 30 days", f: 2 },
+      { k: "real", h: "Your real records", d: "Never here", f: 1 },
+      { k: "inv", h: "Invoices", d: "Kept as the law requires" },
+    ],
+  },
+};
+
+export const ANSWERS: [string, string][] = [
+  ["What do you build with?", "Code and made up data. Our tools, AI included, never see your real records."],
+  ["What if something goes wrong?", "We tell you within 48 hours of becoming aware, and help you respond."],
+];

@@ -1,18 +1,23 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import Symbol from "./Symbol";
+
+/* Inner pages open on tb (the opposite tone to Home), so the server sends the right glass and the first paint does not fade. */
+const OPENS_TB = new Set(["/security", "/how", "/what", "/company"]);
 
 type ThemedDocument = Document & { startViewTransition?: (update: () => void) => unknown };
 
 export default function Nav() {
   const [open, setOpen] = useState(false);
   const [light, setLight] = useState(false);
-  const [tone, setTone] = useState<"ta" | "tb">("ta");
+  const path = usePathname();
+  const [tone, setTone] = useState<"ta" | "tb">(OPENS_TB.has(path) ? "tb" : "ta");
   const bar = useRef<HTMLElement>(null);
 
-  /* The glass takes the tone of the band beneath it, so cream glass never sits over an ink band. */
-  useEffect(() => {
+  /* The glass takes the tone of the band beneath it, so cream glass never sits over an ink band. Read before paint so a page that opens on tb does not fade in. */
+  useLayoutEffect(() => {
     let raf = 0;
     const read = () => {
       raf = 0;
@@ -33,7 +38,7 @@ export default function Nav() {
       removeEventListener("resize", onScroll);
       if (raf) cancelAnimationFrame(raf);
     };
-  }, []);
+  }, [path]);
 
   useEffect(() => {
     setLight(document.documentElement.dataset.theme === "light");

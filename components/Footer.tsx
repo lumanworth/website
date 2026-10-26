@@ -10,6 +10,7 @@ export default function Footer() {
           <span>Perth, Western Australia</span>
           <a href="mailto:support@lumanworth.com">support@lumanworth.com</a>
           <div className="end">
+            <a href="/security">Security and data</a>
             <a href="/privacy">Privacy</a>
             <a href="/terms">Terms of use</a>
           </div>

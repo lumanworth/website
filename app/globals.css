@@ -164,6 +164,8 @@ textarea.field { min-height: 120px; resize: vertical; }
 .rowsx dd { color: var(--soft); }
 
 /* Your records */
+.data .top { display: flex; justify-content: space-between; align-items: end; gap: 24px 40px; flex-wrap: wrap; }
+.data .top .more { margin: 0; padding: 0 0 6px; }
 .data h2 { font-size: clamp(30px, 3vw, 42px); line-height: 1.1; }
 .data dl { display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px; margin-top: 56px; }
 .data dt { font-weight: 500; font-size: 21px; margin-bottom: 10px; }
@@ -207,6 +209,45 @@ textarea.field { min-height: 120px; resize: vertical; }
 .foot .row { display: flex; gap: 28px; flex-wrap: wrap; margin-top: 32px; font-size: 15px; color: var(--muted); }
 .foot .row .end { margin-left: auto; display: flex; gap: 24px; }
 
+/* Inner pages: the head, the site switch and a heading row. Inner pages open on the opposite tone to Home (tb) so the footer closes the alternation. */
+.phead { padding: 184px 0 104px; }
+.phead .wrap { display: grid; grid-template-columns: 7fr 5fr; gap: 72px; align-items: start; }
+.phead .lede { margin-top: 8px; }
+.track { display: flex; gap: 32px; }
+.track button { all: unset; cursor: pointer; position: relative; padding: 4px 0 18px; font-size: 22px; font-weight: 500; letter-spacing: -.01em; color: var(--muted); transition: color .3s; }
+.track button::after { content: ""; position: absolute; left: 0; bottom: 0; height: 7px; width: 28px; border-radius: 4px; background: var(--line); transition: background-color .3s, width .45s var(--ease); }
+.track button:hover, .track button[aria-pressed="true"] { color: var(--fg); }
+.track button[aria-pressed="true"]::after { background: var(--accent); width: 100%; }
+.track button:focus-visible { outline: 2px solid var(--accent); outline-offset: 6px; border-radius: 6px; }
+.jtop { display: flex; justify-content: space-between; align-items: end; gap: 40px; flex-wrap: wrap; }
+.jtop h2.s { margin-bottom: 0; }
+
+/* Security and data: yours and ours, then plain answers and the two statements */
+.sides { margin-top: 56px; display: grid; grid-template-columns: 7fr 5fr; gap: 24px; align-items: start; }
+.side { border-radius: var(--r-card); padding: 40px; }
+.side .hd { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; margin-bottom: 28px; }
+.side h3 { font-size: clamp(22px, 2vw, 28px); }
+.side .hd .mono { color: var(--lit-text); }
+.side.ours { background: transparent; }
+.side.ours .hd .mono { color: var(--muted); }
+.side ul { list-style: none; display: grid; gap: 22px; }
+.side li b { display: block; font-weight: 500; font-size: 18px; }
+.side li span { display: block; color: var(--soft); font-size: 17px; margin-top: 2px; transition: color .4s; }
+.side li.gone b { color: var(--muted); }
+.side li.gone span, .side li.never span { color: var(--lit-text); }
+.side li.new { animation: in .5s var(--ease); }
+.sqa .wrap { display: grid; grid-template-columns: 4fr 8fr; gap: 56px; }
+.sqa .ask { margin-top: 20px; color: var(--soft); }
+.sqa .ask a { color: var(--lit-text); text-underline-offset: 3px; }
+.ans { display: grid; gap: 36px; }
+.ans dt { font-weight: 500; font-size: 22px; letter-spacing: -.01em; margin-bottom: 6px; }
+.ans dd { color: var(--soft); font-size: 18px; max-width: 620px; }
+.dl { margin-top: 64px; display: flex; gap: 16px 40px; flex-wrap: wrap; }
+.dl a { display: inline-flex; align-items: center; gap: 10px; color: var(--lit-text); text-decoration: none; font-weight: 500; }
+.dl a svg { width: 18px; height: 18px; color: var(--accent); transition: transform .3s var(--ease); }
+.dl a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.dl a:hover svg { transform: translateY(3px); }
+
 /* Legal pages */
 .prose { max-width: 760px; padding: 152px var(--gut) 112px; margin: 0 auto; }
 .prose h1 { font-size: 40px; line-height: 1.1; margin-bottom: 12px; }
@@ -224,6 +265,10 @@ textarea.field { min-height: 120px; resize: vertical; }
   :root { --gut: 16px; }
   .band { padding: 88px 0; }
   .what .grid, .detail, .sheet, .qa, .ct .wrap, .keep .head, .co .under, .data dl, .form { grid-template-columns: 1fr; }
+  .phead { padding: 140px 0 72px; }
+  .phead .wrap, .sides, .sqa .wrap { grid-template-columns: 1fr; gap: 32px; }
+  .side { padding: 24px; }
+  .track button { font-size: 18px; }
   .rowsx > div { grid-template-columns: 1fr; gap: 2px; }
   .panel { display: none; }
   .kinds .mob { display: block; max-height: 0; overflow: hidden; transition: max-height .5s var(--ease); }
