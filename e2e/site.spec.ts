@@ -45,9 +45,11 @@ test.describe("home", () => {
         const b = document.querySelector(".panel .pz")!.getBoundingClientRect();
         const hit = (r: DOMRect) => r.left < b.right && r.right > b.left && r.top < b.bottom && r.bottom > b.top;
         return [...document.querySelectorAll(".panel .in")].every((d) => {
+          (d as HTMLElement).style.transition = "none";
           d.classList.add("on");
           const lines = [d.querySelector(".k")!, d.querySelector(".p")!].flatMap((e) => { const r = document.createRange(); r.selectNodeContents(e); return [...r.getClientRects()]; });
           d.classList.remove("on");
+          (d as HTMLElement).style.transition = "";
           return lines.length > 0 && !lines.some(hit);
         });
       });
