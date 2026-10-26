@@ -197,3 +197,25 @@ export const ANSWERS: [string, string][] = [
   ["What do you build with?", "Code and made up data. Our tools, AI included, never see your real records."],
   ["What if something goes wrong?", "We tell you within 48 hours of becoming aware, and help you respond."],
 ];
+
+
+/* How we work: five steps over ten stages. A field is the same for both kinds of job, or { w, s } for a website or a system.
+   Facts from docs/process/how-we-work (25 Oct 2026); no prices. */
+export type Track = "w" | "s";
+export type ByTrack = string | { w: string; s: string };
+export type Stage = { h: ByTrack; p: ByTrack; get: ByTrack; rp?: { s: string } };
+export const pickTrack = (x: ByTrack | undefined, t: Track) => (x && typeof x === "object" ? x[t] : x);
+export const PHASES: [string, number][] = [["Brief", 3], ["Design", 2], ["Build", 1], ["Check", 1], ["Release", 3]];
+const REPEAT = { s: "Build and check repeat for each build phase." };
+export const STAGES: Stage[] = [
+  { h: "Introduction", p: "You tell us what you need, and we tell you straight if we are the right fit.", get: "A clear answer, and a start date if we are full." },
+  { h: "First session", p: "One meeting about your work, not our tools. No charge.", get: "A brief in plain words, with a price range." },
+  { h: "Proposal", p: "What we will build, in what order, and when.", get: { w: "A fixed price for the site.", s: "A fixed price for the design, and a range for the build." } },
+  { h: "Sign", p: "Short terms in plain words. Your accounts are opened in your name from the first week.", get: "Every account in your name." },
+  { h: "Design", p: { w: "The pages drawn and agreed with you before anything is built.", s: "The screens and the data behind them, drawn and agreed before anything is built." }, get: { w: "Pages ready to build.", s: "The design, and a fixed price for each build phase." } },
+  { h: { w: "Build", s: "Build phase" }, p: "Built on a preview you can use from the first week.", get: { w: "A short note every Friday.", s: "A short note every Friday, and a demonstration at the end of the phase." }, rp: REPEAT },
+  { h: "Acceptance", p: "You check it against the done list we agreed at the start.", get: "The final say on whether it is done.", rp: REPEAT },
+  { h: "Handover", p: "Live on your approval, on your accounts. Then our access is removed.", get: "The handover pack: accounts, code and runbook." },
+  { h: "After", p: "Defects fixed free for 30 days after go live. We do not host it or sell support.", get: "Our time, only if you want it." },
+  { h: "Close", p: "We delete our copies of your information within 30 days.", get: "Nothing of yours left with us." },
+];

@@ -1,7 +1,7 @@
 import { expect, test, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
-const pages = ["/", "/security", "/privacy", "/terms"];
+const pages = ["/", "/how", "/security", "/privacy", "/terms"];
 
 async function noOverflow(page: Page) {
   const [sw, iw] = await page.evaluate(() => [document.documentElement.scrollWidth, innerWidth]);
@@ -164,6 +164,79 @@ test.describe("security and data", () => {
     await page.goto("/");
     await expect(page.locator("#data a[href='/security']")).toHaveCount(1);
     await expect(page.locator("footer a[href='/security']")).toHaveCount(1);
+  });
+});
+
+test.describe("how we work", () => {
+  test("stages step by key and button, the switch changes the words and is remembered", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/how");
+    const panel = page.locator("#stage-panel");
+    const tabs = page.getByRole("tab");
+    await expect(tabs).toHaveCount(10);
+    await expect(page.getByRole("button", { name: "Play" })).toBeVisible();
+    await expect(panel).toContainText("Stage 1 of 10");
+    await tabs.nth(0).focus();
+    await page.keyboard.press("ArrowLeft");
+    await expect(tabs.nth(0)).toHaveAttribute("aria-selected", "true");
+    await page.keyboard.press("ArrowRight");
+    await expect(tabs.nth(1)).toBeFocused();
+    await expect(tabs.nth(1)).toHaveAttribute("aria-selected", "true");
+    await tabs.nth(5).click();
+    await expect(panel).toContainText("Build phase");
+    await expect(panel).toContainText("Build and check repeat for each build phase.");
+    await page.getByRole("button", { name: "A website" }).click();
+    await expect(panel.locator("h3")).toHaveText("Build");
+    await expect(panel).not.toContainText("repeat for each build phase");
+    const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa"]).analyze();
+    expect(axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id), "website track").toEqual([]);
+    await page.reload();
+    await expect(page.getByRole("button", { name: "A website" })).toHaveAttribute("aria-pressed", "true");
+    await tabs.nth(9).click();
+    const next = page.getByRole("button", { name: "Next stage" });
+    await expect(next).toHaveAttribute("aria-disabled", "true");
+    await next.focus();
+    await page.keyboard.press("Enter");
+    await expect(panel).toContainText("Stage 10 of 10");
+    await expect(next).toBeFocused();
+    await page.getByRole("button", { name: "Play" }).click();
+    await expect(panel).toContainText("Stage 1 of 10");
+    await expect(page.getByRole("button", { name: "Pause" })).toBeVisible();
+  });
+
+  test("the timer holds out of view, under reduced motion, and when focus comes in", async ({ browser }) => {
+    const still = await browser.newPage({ reducedMotion: "reduce" });
+    await still.goto("/how");
+    await still.locator("#stage-panel").scrollIntoViewIfNeeded();
+    const away = await browser.newPage();
+    await away.goto("/how");
+    await away.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    await away.waitForTimeout(7500);
+    await expect(still.locator("#stage-panel"), "reduced motion").toContainText("Stage 1 of 10");
+    await expect(away.locator("#stage-panel"), "out of view").toContainText("Stage 1 of 10");
+    await away.locator("#stage-panel").scrollIntoViewIfNeeded();
+    await away.getByRole("tab").first().focus();
+    await expect(away.getByRole("button", { name: "Play" })).toBeVisible();
+    await expect(away.locator(".sr[aria-live]")).toHaveText("");
+    await away.keyboard.press("ArrowRight");
+    await expect(away.locator(".sr[aria-live]")).toHaveText("Stage 2 of 10, First session");
+    await still.close();
+    await away.close();
+  });
+
+  test("the timer moves on and pause holds it", async ({ page }) => {
+    await page.goto("/how");
+    await page.locator("#stage-panel").scrollIntoViewIfNeeded();
+    await expect(page.locator("#stage-panel")).toContainText("Stage 2 of 10", { timeout: 9000 });
+    await page.getByRole("button", { name: "Pause" }).click();
+    await expect(page.getByRole("button", { name: "Play" })).toBeVisible();
+    await page.waitForTimeout(7000);
+    await expect(page.locator("#stage-panel")).toContainText("Stage 2 of 10");
+  });
+
+  test("the nav opens in the tone of the head", async ({ page }) => {
+    await page.goto("/how");
+    await expect(page.locator("header.nav")).toHaveClass(/\btb\b/);
   });
 });
 
