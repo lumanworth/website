@@ -250,6 +250,20 @@ test.describe("how we work", () => {
     await expect(page.locator("#stage-panel")).toContainText("Stage 2 of 10");
   });
 
+  test("stage labels sit level and the warm marks follow the band", async ({ page }, info) => {
+    test.skip(info.project.name !== "desktop", "the labels show at desktop width");
+    for (const [theme, rgb] of [["light", "rgb(74, 50, 32)"], ["dark", "rgb(136, 144, 104)"]]) {
+      await page.addInitScript((t) => localStorage.setItem("lw-theme", t), theme);
+      await page.emulateMedia({ reducedMotion: "reduce" });
+      await page.goto("/how");
+      await page.getByRole("button", { name: "A system" }).click();
+      const tops = await page.locator(".grp .nm").evaluateAll((ns) => ns.map((n) => Math.round(n.getBoundingClientRect().top)));
+      expect(new Set(tops).size, "one line of labels").toBe(1);
+      const under = await page.locator(".track button[aria-pressed='true']").evaluate((b) => getComputedStyle(b, "::after").backgroundColor);
+      expect(under, `switch line in ${theme}`).toBe(rgb);
+    }
+  });
+
   test("the nav opens in the tone of the head", async ({ page }) => {
     await page.goto("/how");
     await expect(page.locator(".hclose .lede")).toHaveText("A small number of jobs at a time, so the person you meet is the person who builds yours.");
@@ -300,8 +314,12 @@ test.describe("what we do", () => {
 
   test("the record and the answer play once in view", async ({ page }) => {
     await page.goto("/what");
-    await page.locator("#sys .ev").scrollIntoViewIfNeeded();
-    await expect(page.locator("#sys .ev li")).toHaveCount(10, { timeout: 9000 });
+    const card = page.locator("#sys .ev");
+    await expect(card.locator("li")).toHaveCount(10);
+    const h0 = await card.evaluate((e) => e.getBoundingClientRect().height);
+    await card.scrollIntoViewIfNeeded();
+    await expect(card.locator("li.w")).toHaveCount(0, { timeout: 9000 });
+    expect(await card.evaluate((e) => e.getBoundingClientRect().height), "the card keeps its size while it plays").toBe(h0);
     await page.locator("#ai .answer").scrollIntoViewIfNeeded();
     await expect(page.locator("#ai .src")).toHaveClass(/\bon\b/, { timeout: 6000 });
     await expect(page.locator("#ai .answer .a")).toHaveText("SAE 15W-40. About 38 litres with a new filter.");

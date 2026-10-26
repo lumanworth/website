@@ -5,7 +5,6 @@ import Arrow from "./Arrow";
 import { PHASES, STAGES, pickTrack, type Track } from "@/lib/words";
 
 const DUR = 6500;
-const REPEATS = new Set([5, 6]);
 const phaseOf = (i: number) => {
   let a = 0;
   for (let g = 0; g < PHASES.length; g++) {
@@ -118,23 +117,22 @@ export default function Journey() {
           const first = n0;
           n0 += n;
           return (
-            <div key={name} className={["grp", g === 2 || g === 3 ? "rp" : "", phaseOf(k) === g ? "on" : ""].join(" ").trim()} style={{ "--n": n } as React.CSSProperties}>
+            <div key={name} className={phaseOf(k) === g ? "grp on" : "grp"} style={{ "--n": n } as React.CSSProperties}>
               <div className="segs">
                 {Array.from({ length: n }, (_, j) => {
                   const i = first + j;
                   return (
                     <button key={i} type="button" role="tab" id={`stage-${i}`} aria-controls="stage-panel" aria-selected={i === k} tabIndex={i === k ? 0 : -1}
                       aria-label={`Stage ${i + 1}, ${pickTrack(STAGES[i].h, track)}`} ref={(el) => { tabs.current[i] = el; }}
-                      className={REPEATS.has(i) ? "seg rep" : "seg"}
+                      className="seg"
                       onClick={() => { hold(); go(i); }} onKeyDown={(e) => onKey(e, i)}>
                       <span className="no mono">{i + 1}</span>
                       <span className="bar"><i ref={(el) => { fills.current[i] = el; }} /></span>
-                      <span className="gh" /><span className="gh" />
                     </button>
                   );
                 })}
               </div>
-              <span className="nm">{name}<small aria-hidden={track === "s" && (g === 2 || g === 3) ? undefined : true}>Each build phase</small></span>
+              <span className="nm">{name}</span>
             </div>
           );
         })}

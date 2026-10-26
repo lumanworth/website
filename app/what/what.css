@@ -19,8 +19,10 @@
 .wd .jh { display: flex; justify-content: space-between; align-items: start; gap: 16px; margin-bottom: 24px; }
 .wd .jh b { display: block; font-weight: 500; font-size: 22px; }
 .wd .jh span { color: var(--soft); font-size: 15px; }
-.wd .ev { list-style: none; min-height: 484px; }
-.wd .ev li { display: grid; grid-template-columns: 1fr auto; gap: 4px 16px; padding: 9px 0; animation: in .45s var(--ease); }
+.wd .ev { list-style: none; }
+.wd .ev li { display: grid; grid-template-columns: 1fr auto; gap: 4px 16px; padding: 9px 0; transition: opacity .45s var(--ease), transform .45s var(--ease); }
+/* Every row keeps its place from the first paint; a row waiting to play is held invisible, so the card never changes size. */
+.wd .ev li.w { opacity: 0; transform: translateY(10px); visibility: hidden; }
 .wd .ev li b { font-weight: 500; font-size: 16px; }
 .wd .ev .t { color: var(--muted); text-align: right; }
 .wd .ev .e { grid-column: 1 / -1; color: var(--muted); font-size: 12px; }
@@ -34,7 +36,7 @@
 .wd .steps { list-style: none; }
 .wd .steps li { display: grid; grid-template-columns: 1fr 72px; gap: 16px; align-items: baseline; overflow: hidden; max-height: 8em; padding: 10px 0; transition: max-height .5s var(--ease), opacity .4s var(--ease), padding .5s var(--ease); }
 .wd .steps li span { font-size: 19px; position: relative; transition: color .4s; }
-.wd .steps li span:first-child::after { content: ""; position: absolute; left: 0; top: 55%; height: 2px; width: 0; background: var(--accent); transition: width .45s var(--ease); }
+.wd .steps li span:first-child::after { content: ""; position: absolute; left: 0; top: 55%; height: 2px; width: 0; background: var(--warm); transition: width .45s var(--ease); }
 .wd .steps li .mono { color: var(--muted); text-align: right; font-size: 13px; }
 .wd .steps li.cut span:first-child { color: var(--muted); }
 .wd .steps li.cut span:first-child::after { width: 100%; }
@@ -50,7 +52,7 @@
 .wd .trace li { color: var(--muted); font-size: 12px; padding: 3px 0; animation: in .3s var(--ease); }
 .wd .answer { margin-top: 8px; min-height: 120px; }
 .wd .answer .a { font-size: 22px; line-height: 1.4; min-height: 62px; }
-.wd .answer .cur { display: inline-block; width: 10px; height: 3px; border-radius: 2px; background: var(--accent); margin-left: 2px; vertical-align: middle; }
+.wd .answer .cur { display: inline-block; width: 10px; height: 3px; border-radius: 2px; background: var(--warm); margin-left: 2px; vertical-align: middle; }
 .wd .answer .src { margin-top: 12px; color: var(--lit-text); opacity: 0; transition: opacity .4s; }
 .wd .answer .src.on { opacity: 1; }
 /* Websites and apps: the page loading on a slow network */
@@ -59,7 +61,7 @@
 .wd .browser { max-width: 820px; margin: 56px auto 0; }
 .wd .bar { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 16px; }
 .wd .site { position: relative; overflow: hidden; border-radius: var(--r-card); border: 1px solid var(--line); padding: 36px 40px 40px; display: grid; grid-template-columns: 7fr 5fr; gap: 40px; align-items: end; }
-.wd .site .load { position: absolute; left: 0; top: 0; height: 2px; width: 0; background: var(--accent); }
+.wd .site .load { position: absolute; left: 0; top: 0; height: 2px; width: 0; background: var(--warm); }
 .wd .site .sn { grid-column: 1 / -1; display: flex; justify-content: space-between; font-size: 14px; color: var(--muted); margin-bottom: 24px; }
 .wd .site .sn b { font-weight: 500; color: var(--fg); }
 .wd .site .h { font-size: clamp(26px, 2.6vw, 34px); font-weight: 500; letter-spacing: -.02em; line-height: 1.05; }
