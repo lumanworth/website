@@ -54,7 +54,10 @@ test.describe("home", () => {
     await expect(page.locator("#what a.pl[href='/what']")).toHaveText("All of what we do");
     await expect(page.locator("#how a.pl[href='/how']")).toHaveText("The full process");
     await expect(page.locator("#contact .cl")).toHaveText("Most of our work comes by introduction. We do not publish client names.");
-    await page.evaluate(() => { const f = document.getElementById("faq")!; scrollTo(0, f.getBoundingClientRect().top + scrollY - 10); });
+    const under = (id: string) => page.evaluate((id) => { const f = document.getElementById(id)!; scrollTo(0, f.getBoundingClientRect().top + scrollY - 10); }, id);
+    await under("yours");
+    await expect(page.locator("header.nav")).toHaveClass(/\btb\b/);
+    await under("faq");
     await expect(page.locator("header.nav")).toHaveClass(/\bta\b/);
   });
 
