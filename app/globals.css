@@ -2,7 +2,7 @@
    both self hosted through next/font. No gradients, shadows or glows.
    Ink and cream alternate section by section: ta follows the lights, tb is its opposite. A card (ts) on ink is a quiet step of the band; on cream it has no fill, only its line (26 Oct).
    Type scale (26 Oct): no huge headline over small grey writing. Headings at most about twice body size, ledes and body at full strength; the hero and the footer wordmark are the only large type.
-   Moss only for lit things and headings on cream; small text that would be lit uses --lit-text (cream on ink, moss on cream) because Moss lit on Ink is 4.44:1; Bark only as the button on cream. Lines only mark things you click; everything else is spacing and type. */
+   Moss only for lit things and headings on cream; small text that would be lit uses --lit-text (cream on ink, moss on cream) because Moss lit on Ink is 4.44:1; Bark is the button on cream, and (26 Oct) --warm marks movement and position: timer fills, progress, the chosen switch; --warm-text the numbers beside them (Bark on cream, cream on ink). Moss keeps headings, words and links. Lines only mark things you click; everything else is spacing and type. */
 :root {
   --ink: #1e2a1c; --ink-1: #d0ccb9; --ink-2: #9c9c8b; --ink-3: #5d6354; --ink-5: #151d14;
   --moss: #5b6b3a; --moss-lit: #889068;
@@ -16,10 +16,12 @@
 :root[data-theme="dark"], :root[data-theme="dark"] .ta, :root[data-theme="light"] .tb {
   --bg: var(--ink); --fg: var(--cream); --head: var(--cream); --soft: var(--ink-1); --muted: var(--ink-2); --line: var(--ink-line);
   --accent: var(--moss-lit); --btn: var(--cream); --btn-fg: var(--ink); --card: var(--ink-5); --tab: var(--ink-5); --lit-text: var(--cream);
+  --warm: var(--moss-lit); --warm-text: var(--cream);
 }
 :root[data-theme="light"], :root[data-theme="dark"] .tb, :root[data-theme="light"] .ta {
   --bg: var(--cream); --fg: var(--ink); --head: var(--moss); --soft: var(--ink-3); --muted: var(--ink-3); --line: var(--cream-5);
   --accent: var(--moss); --btn: var(--bark); --btn-fg: var(--cream-1); --card: transparent; --tab: var(--cream); --lit-text: var(--moss);
+  --warm: var(--bark); --warm-text: var(--bark);
 }
 :root[data-theme="dark"] { color-scheme: dark; }
 :root[data-theme="light"] { color-scheme: light; }
@@ -101,7 +103,7 @@ textarea.field { min-height: 120px; resize: vertical; }
 .kinds button { all: unset; box-sizing: border-box; cursor: pointer; display: block; width: 100%; padding: 22px 0 24px; position: relative; border-top: 1px solid var(--line); }
 .kinds li:last-child button { border-bottom: 1px solid var(--line); }
 .kinds li:nth-child(even) button { padding-left: 48px; }
-.kinds .ln { position: absolute; left: 0; top: -4px; height: 7px; width: 0; border-radius: 4px; background: var(--accent); }
+.kinds .ln { position: absolute; left: 0; top: -4px; height: 7px; width: 0; border-radius: 4px; background: var(--warm); }
 .kinds .h { display: block; font-size: clamp(24px, 2.3vw, 30px); font-weight: 500; letter-spacing: -.02em; line-height: 1.08; color: var(--muted); transition: color .4s; }
 .kinds .t { display: block; margin-top: 6px; font-size: 17px; color: var(--muted); transition: color .4s; }
 .kinds li.act .h, .kinds button:hover .h { color: var(--fg); }
@@ -125,13 +127,13 @@ textarea.field { min-height: 120px; resize: vertical; }
 /* How we work: scrubber */
 .scrub { margin-top: 56px; position: relative; padding: 0 36px; }
 .rail { height: 7px; border-radius: 4px; background: var(--line); position: relative; }
-.rail i { position: absolute; inset: 0 auto 0 0; border-radius: 4px; background: var(--accent); transition: width .5s var(--ease); }
+.rail i { position: absolute; inset: 0 auto 0 0; border-radius: 4px; background: var(--warm); transition: width .5s var(--ease); }
 .nodes { position: relative; height: 64px; margin-top: -17px; }
 .nodes button { all: unset; cursor: pointer; position: absolute; top: 0; left: calc(var(--i) * 25%); transform: translateX(-50%); display: grid; justify-items: center; gap: 14px; white-space: nowrap; }
 .nodes button span { width: 26px; height: 26px; border-radius: 50%; background: var(--bg); border: 2px solid var(--line); transition: background-color .4s, border-color .4s, transform .3s var(--ease); }
 .nodes button:hover span { transform: scale(1.15); }
 .nodes button b { font-weight: 500; font-size: 20px; color: var(--muted); transition: color .3s; }
-.nodes button[aria-selected="true"] span, .nodes button.done span { background: var(--accent); border-color: var(--accent); }
+.nodes button[aria-selected="true"] span, .nodes button.done span { background: var(--warm); border-color: var(--warm); }
 .nodes button[aria-selected="true"] b { color: var(--fg); }
 .nodes button:focus-visible { outline: 2px solid var(--accent); outline-offset: 6px; border-radius: 6px; }
 .detail { margin-top: 56px; display: grid; grid-template-columns: 4fr 8fr; gap: 48px; min-height: 240px; }
@@ -194,7 +196,7 @@ textarea.field { min-height: 120px; resize: vertical; }
 .nexth { margin-top: 40px; font-size: 16px; color: var(--muted); }
 .next { list-style: none; margin-top: 10px; }
 .next li { display: grid; grid-template-columns: 40px 1fr; gap: 8px; padding: 10px 0; font-size: 18px; }
-.next .mono { color: var(--lit-text); padding-top: 3px; }
+.next .mono { color: var(--warm-text); padding-top: 3px; }
 
 /* Wordmark footer: letters light on hover */
 .foot { padding: 72px 0 40px; }
@@ -212,7 +214,7 @@ textarea.field { min-height: 120px; resize: vertical; }
 .track button { all: unset; cursor: pointer; position: relative; padding: 4px 0 18px; font-size: 22px; font-weight: 500; letter-spacing: -.01em; color: var(--muted); transition: color .3s; }
 .track button::after { content: ""; position: absolute; left: 0; bottom: 0; height: 7px; width: 28px; border-radius: 4px; background: var(--line); transition: background-color .3s, width .45s var(--ease); }
 .track button:hover, .track button[aria-pressed="true"] { color: var(--fg); }
-.track button[aria-pressed="true"]::after { background: var(--accent); width: 100%; }
+.track button[aria-pressed="true"]::after { background: var(--warm); width: 100%; }
 .track button:focus-visible { outline: 2px solid var(--accent); outline-offset: 6px; border-radius: 6px; }
 .jtop { display: flex; justify-content: space-between; align-items: end; gap: 40px; flex-wrap: wrap; }
 .jtop h2.s { margin-bottom: 0; }

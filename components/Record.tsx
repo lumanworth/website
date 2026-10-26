@@ -6,7 +6,8 @@ import { EVENTS } from "@/lib/words";
 import { onFirstView, reducedMotion } from "@/lib/view";
 
 /* Business systems: one service call record building event by event, from booking to paid. Rendered whole on the server;
-   with script it empties and plays once in view, and again on Play again. Under reduced motion it stays whole. */
+   with script the rows are held invisible in their places and play once in view, and again on Play again, so the card never
+   changes size. Under reduced motion it stays whole. */
 export default function Record() {
   const [n, setN] = useState(EVENTS.length);
   const box = useRef<HTMLDivElement>(null);
@@ -39,8 +40,8 @@ export default function Record() {
         <button type="button" className="rb" aria-label="Play again" onClick={() => { touched.current = true; play(); }}><Replay /></button>
       </div>
       <ol className="ev">
-        {EVENTS.slice(0, n).map((x) => (
-          <li key={x.e}>
+        {EVENTS.map((x, i) => (
+          <li key={x.e} className={i < n ? undefined : "w"}>
             <b>{x.a}{x.off && <span className="off">no signal</span>}</b>
             <span className="t mono">{x.t}</span>
             <span className="e mono">{x.e}, {x.who}</span>
