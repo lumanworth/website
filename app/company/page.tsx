@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import "./company.css";
 import Scope from "@/components/Scope";
+import { OG_BASE } from "@/lib/meta";
 
 export const metadata: Metadata = {
   title: "Company",
   description: "A small software company in Perth. A small number of jobs at a time, what we take on, and what we turn down.",
   alternates: { canonical: "/company" },
   openGraph: {
+    ...OG_BASE,
     title: "Company, Lumanworth",
     description: "A small software company in Perth. We build business systems, apps and websites, and hand every one of them over.",
     url: "/company",

@@ -58,7 +58,7 @@ h2.s { font-size: clamp(30px, 3vw, 42px); line-height: 1.1; margin-bottom: 16px;
 .nav nav { margin-left: auto; }
 .nav ul { display: flex; gap: 28px; list-style: none; }
 .nav ul a { text-decoration: none; font-size: 15px; color: var(--fg); white-space: nowrap; }
-.nav ul a:hover { color: var(--accent); }
+.nav ul a:hover { text-decoration: underline 1px var(--accent); text-underline-offset: 6px; }
 .nav ul a[aria-current="page"] { text-decoration: underline 1px var(--accent); text-underline-offset: 6px; }
 .sw { border: 1px solid color-mix(in srgb, var(--fg) 24%, transparent); background: none; border-radius: 999px; padding: 6px 14px; font-size: 15px; color: var(--fg); cursor: pointer; white-space: nowrap; }
 .sw:hover { color: var(--fg); border-color: var(--accent); }
