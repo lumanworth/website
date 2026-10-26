@@ -34,6 +34,38 @@ test.describe("pages", () => {
 });
 
 test.describe("home", () => {
+  test("the What we do timer pauses and plays again", async ({ page }, info) => {
+    await page.goto("/");
+    const desk = info.project.name === "desktop";
+    const pz = page.locator(desk ? ".panel .pz" : ".pz.ph");
+    await expect(page.locator(desk ? ".pz.ph" : ".panel .pz")).toBeHidden();
+    await page.locator("#what").scrollIntoViewIfNeeded();
+    const line = page.locator(".kinds li.act .ln");
+    const width = () => line.evaluate((l) => parseFloat((l as HTMLElement).style.width) || 0);
+    await expect.poll(width).toBeGreaterThan(5);
+    await page.mouse.move(0, 0);
+    await pz.click();
+    await expect(pz).toHaveAttribute("aria-label", "Play");
+    const act = await page.locator(".kinds li.act .h").textContent();
+    await page.waitForTimeout(7500);
+    await expect(page.locator(".kinds li.act .h")).toHaveText(act!);
+    await expect(line).toHaveAttribute("style", /width: 100%/);
+    await pz.click();
+    await expect(pz).toHaveAttribute("aria-label", "Pause");
+    await expect(page.locator(".kinds li.act .h"), "play starts the same line again").toHaveText(act!);
+    await page.mouse.move(0, 0);
+    await page.evaluate(() => document.getElementById("what")!.scrollIntoView());
+    await expect.poll(width).toBeGreaterThan(5);
+    await expect.poll(width).toBeLessThan(100);
+  });
+
+  test("under reduced motion the timer is still and there is no pause button", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/");
+    await expect(page.locator(".pz")).toHaveCount(2);
+    for (const b of await page.locator(".pz").all()) await expect(b).toBeHidden();
+  });
+
   test("headings, bands and legal links are in place", async ({ page }) => {
     await page.goto("/");
     await expect(page.locator("h1")).toHaveText(/Built to last/);
@@ -363,6 +395,14 @@ test.describe("company", () => {
     const bad = axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
     expect(bad.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(" ") + " " + n.failureSummary).join(" | ")}`), "turn down state").toEqual([]);
   });
+});
+
+test("privacy names no providers and says where data goes", async ({ page }) => {
+  await page.goto("/privacy");
+  const text = await page.locator("main").innerText();
+  expect(text).not.toMatch(/Vercel|Resend/);
+  expect(text).toContain("including in the United States");
+  expect(text).toContain("Our hosting provider receives your IP address");
 });
 
 test.describe("open graph", () => {

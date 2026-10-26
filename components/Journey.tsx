@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import Arrow from "./Arrow";
+import { Pause, Play } from "./PlayPause";
 import { PHASES, STAGES, pickTrack, type Track } from "@/lib/words";
 
 const DUR = 6500;
@@ -13,8 +14,6 @@ const phaseOf = (i: number) => {
   }
   return PHASES.length - 1;
 };
-const Pause = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true"><path d="M9 5v14M15 5v14" /></svg>;
-const Play = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" aria-hidden="true"><path d="M8 5l11 7-11 7z" /></svg>;
 
 /* From hello to handover: ten lines under the five steps. The current line fills as a timer and moves on while the band is in view;
    pause, a click or the arrow keys stop it. The switch changes every part that depends on the kind of job, and is remembered. */

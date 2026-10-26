@@ -12,15 +12,15 @@ export default function Privacy() {
   return (
     <main id="main" className="prose">
       <h1>Privacy</h1>
-      <p className="date">Last updated 25 October 2026</p>
+      <p className="date">Last updated 26 October 2026</p>
       <p>Lumanworth is a software company in Perth, Western Australia. This page says what we collect, why, and what you can ask of us. We handle personal information in line with the Australian Privacy Principles.</p>
 
       <h2>What this website collects</h2>
-      <p>Nothing on its own. This site sets no cookies and runs no analytics or tracking. The fonts are served from our own site, not from a third party. One service sees your visit: the site is served by Vercel, which receives your IP address and browser details to deliver the page and keeps standard server logs for a short time for security. We do not use those logs to identify you.</p>
+      <p>Nothing on its own. This site sets no cookies and runs no analytics or tracking. The fonts are served from our own site, not from a third party. Our hosting provider receives your IP address and browser details to deliver each page, and keeps standard server logs for a short time for security. We do not use those logs to identify you.</p>
       <p>The light and dark setting is kept in your own browser only, so the page remembers your choice. It is not sent to us.</p>
 
       <h2>What you send us</h2>
-      <p>When you use the form or email us, we keep your name, your email address, your company if you gave it, and what you wrote. The form is delivered to our mailbox through an email delivery service, which handles the message only to deliver it. The hosting and the email delivery service both run outside Australia, so what you send through this site may be handled overseas by those two services, and only for those purposes. If you name the person who sent you, we use that only to thank them.</p>
+      <p>When you use the form or email us, we keep your name, your email address, your company if you gave it, and what you wrote. We use service providers to host this site and to deliver messages sent through the form. Some of them are located outside Australia, including in the United States. We take reasonable steps to ensure they handle personal information in line with the Australian Privacy Principles and only to provide their services to us. If you name the person who sent you, we use that only to thank them.</p>
       <p>If we go on to work together, we keep what the work needs: your contact details, the documents you share, and the records of the engagement.</p>
 
       <h2>How we use it</h2>
