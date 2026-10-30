@@ -30,6 +30,8 @@ export const metadata: Metadata = {
     title: "Lumanworth",
     description: TAGLINE,
   },
+  /* The share image itself is app/opengraph-image.png, which every page inherits; X falls back to it for the large card. */
+  twitter: { card: "summary_large_image" },
   robots: { index: true, follow: true },
 };
 
