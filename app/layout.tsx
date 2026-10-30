@@ -3,7 +3,7 @@ import { JetBrains_Mono, Manrope } from "next/font/google";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import Reveal from "@/components/Reveal";
-import { OG_BASE, TAGLINE } from "@/lib/meta";
+import { OG_BASE, SHARE_IMAGE, TAGLINE } from "@/lib/meta";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -30,8 +30,8 @@ export const metadata: Metadata = {
     title: "Lumanworth",
     description: TAGLINE,
   },
-  /* The share image itself is app/opengraph-image.png, which every page inherits; X falls back to it for the large card. */
-  twitter: { card: "summary_large_image" },
+  /* No page sets its own twitter field, so every page inherits this card and image. */
+  twitter: { card: "summary_large_image", images: [SHARE_IMAGE] },
   robots: { index: true, follow: true },
 };
 
